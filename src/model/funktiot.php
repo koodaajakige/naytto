@@ -14,15 +14,11 @@ function tilikaudenVoitto ($voittoEnnenVeroja, $verot) {
 }
 
 function osaketuotto($tilikaudenVoitto, $osakkeidenMaara) {
-    #if ($om>0) {
-        return $tilikaudenVoitto/$osakkeidenMaara;
-    #}
+    return $tilikaudenVoitto/$osakkeidenMaara;
 }
 
 function osakkeetAlussa($sijoitus, $osakehinta) {
-    #if ($oh>0) {
-        return $sijoitus/$osakehinta;
-    #}
+    return $sijoitus/$osakehinta;
 }
 
 function sipo ($osaketuotto, $osakkeetAlussa, $sijoitus) {
