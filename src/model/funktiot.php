@@ -1,22 +1,49 @@
 <?php
-/*
-require once MODEL . dir hae.php
-$tiedot = haeTiedot();
-$nimi = $_POST['nimi'];
-$liikevaihto = $_POST['liikevaihto'];
-$materiaalit = $_POST['materiaalit'];
-$henkilosto = $_POST['henkilosto'];
-$poistot = $_POST['poistot'];
-$muutkulut = $_POST['muutkulut'];
-$rahoitus = $_POST['rahoitus'];
-$verot = $_POST['verot'];
-$osakkeidenMaara = $_POST['kokonaismaara'];
-$osakehinta = $_POST['osakehinta'];
-$sijoitus = $_POST['sijoitus'];
-*/
 
-function liikevoitto($l, $ma, $h, $mk, $p) {
-    return $l-$ma-$h-$mk-$p;
+function liikevoitto($liikevaihto, $materiaalit, $henkilosto, $poistot, $muutkulut) {
+    return $liikevaihto-$materiaalit-$henkilosto-$poistot-$muutkulut;
+   
+}
+
+function voittoEnnenVeroja ($liikevoitto, $rahoitus) {
+    return $liikevoitto-$rahoitus;
+}
+
+function tilikaudenVoitto ($voittoEnnenVeroja, $verot) {
+    return $voittoEnnenVeroja-$verot;
+}
+
+function osaketuotto($tilikaudenVoitto, $osakkeidenMaara) {
+    #if ($om>0) {
+        return $tilikaudenVoitto/$osakkeidenMaara;
+    #}
+}
+
+function osakkeetAlussa($sijoitus, $osakehinta) {
+    #if ($oh>0) {
+        return $sijoitus/$osakehinta;
+    #}
+}
+
+function sipo ($osaketuotto, $osakkeetAlussa, $sijoitus) {
+    $tuotto€ = $osaketuotto * $osakkeetAlussa;
+    $tuottoPros= (($osaketuotto * $osakkeetAlussa)/$sijoitus)*100;
+    $tulos = array($tuotto€, $tuottoPros);
+    return $tulos;
+}
+
+function tuottoVuosittain ($tuotto€, $osakehinta ) {
+    return $tuotto€/$osakehinta;
+}
+
+function yhteismaara ($osakkeetAlussa, $uudetOsakkeet) {
+    return $osakkeetAlussa + $uudetOsakkeet;
+}
+
+
+/*
+function liikevoitto($lv, $ma, $h, $p,$mk) {
+    return $lv-$ma-$h-$p-$mk;
 }
 $liikevoitto = liikevoitto($liikevaihto, $materiaalit, $henkilosto, $muutkulut, $poistot);
 
@@ -60,6 +87,6 @@ function yhteismaara ($osal, $uudos) {
     return $osal + $uudos;
 }
 $yhtmaara = yhteismaara($osakkeetAlussa, $uudetOsakkeet);
-
+*/
 
 ?>
