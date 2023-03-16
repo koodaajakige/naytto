@@ -12,10 +12,9 @@
     <ul>
       <li><a href="etusivu" title="Etusivu">Etusivu</a></li>
       <li><a href="lisaa" title="Lisaa tiedot">Lisää tiedot</a></li>
+      <li><a href="hae" title="Tulosta tiedot">Tulosta tiedot</a></li>
+      <li><a href="lisaa_tili" title="Luo uusi tili">Luo uusi tili</a></li>
 </ul>
-<a href="hae" title="Hae tiedot">Hae tiedot</a>
-<a href="tulosta" title="Tulosta tiedot">Tulosta tiedot</a>
-</div>
     <section>
         <?=$this->section('content')?>
     </section>
