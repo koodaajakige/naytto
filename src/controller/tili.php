@@ -5,12 +5,19 @@
 
 function lisaaTili ($formdata) {
     #tuodaaan uusi_tili funktiot, joilla voidaan lisätä tili tk:aan
-    require_once  (MODEL_DIR . 'uusi_tili.php');
+    require_once  (MODEL_DIR . 'lisaa_tili.php');
     #alustetaan virhetaulukko, palautuu tyhjänä tai virheillä täytettynä
     $error = [];
 
     #lomaketietojen tarkistus, jos muoto ei ole oikea, virhelistaan virhekuvaus
     #jos kaikki läpi virhelista lopus tyhjä
+    if (!isset($formadata['nimi']) || !$formadata['nimi']) {
+        $virhe['nimi'] = "Anna nimesi.";
+    } else {
+        if (!preg_match("/^[- '\p{L}]+$/u", $formadata['nimi'])) {
+            $virhe['nimi'] = "Syötä nimesi ilman erikoismerkkejä";
+        }
+    }
 
     //tarkistetaan sposti määritelty ja oikea muoto
     if (!isset($formdata['email']) || !$formdata['email']) {
@@ -43,10 +50,11 @@ function lisaaTili ($formdata) {
         // Salataan salasana myös samalla
         $email = $formdata['email'];
         $salasana = password_hash($formadata['salasana1'], PASSWORD_DEFAULT);
+        $nimi = $formadata['nimi'];
 
         // Lisätään henkilö tietokantaan. Jos lisäys onnistui,
         // tulee palautusarvona lisätyn henkilön id-tunniste.
-        $idhenkilo = lisaaTili($email,$salasana);
+        $idhenkilo = lisaaTili($nimi,$email,$salasana);
         #lisääTIlil jos ei salasanaa vaan kertäkayttötunnus?? vai kuinka
 
         // Palautetaan JSON-tyyppinen taulukko, jossa:

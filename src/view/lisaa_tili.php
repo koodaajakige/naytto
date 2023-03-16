@@ -4,6 +4,12 @@
 
 <form action="" method="POST">
     <div>
+        <label for="nimi">Nimi:</label>
+        <input id="nimi" type="text" name="nimi" value="<?= getValue($formdata,'nimi') ?>">
+        <div class="error"><span><?= getValue($error,'nimi'); ?></span></div>
+    </div>
+
+    <div>
         <label>Sähköposti:</label>
         <input type="text" name="email" value="<?= getValue($formdata,'email') ?>">
         <div class="error"><?= getValue($error,'email'); ?></div>

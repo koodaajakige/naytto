@@ -2,8 +2,8 @@
 
 require_once HELPERS_DIR . 'DB.php';
 
-function lisaaTili($email, $salasana) {
-    DB::run('INSERT INTO henkilo (email, salasana) VALUE (?,?);', [$email, $salasana]);
+function lisaaTili($nimi, $email, $salasana) {
+    DB::run('INSERT INTO tili (nimi, email, salasana) VALUE (?,?,?);', [$nimi, $email, $salasana]);
     return DB::lastInsertedId(); #palauttaa lisätyn tilin id-tunnisteen
 }
 
