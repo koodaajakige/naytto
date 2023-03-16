@@ -2,7 +2,6 @@
 
 function liikevoitto($liikevaihto, $materiaalit, $henkilosto, $poistot, $muutkulut) {
     return $liikevaihto-$materiaalit-$henkilosto-$poistot-$muutkulut;
-   
 }
 
 function voittoEnnenVeroja ($liikevoitto, $rahoitus) {
