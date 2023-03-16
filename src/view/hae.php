@@ -2,12 +2,15 @@
 
 <h1>Tietojen tulostus tietokannasta</h1>
 
-<p>Printtaa sie tietos tähä hei.</p>
+<p>Tilinpäätöstiedot ja sijoitustiedot</p>
 
 <div class='hae'>
 <?php
 require_once MODEL_DIR . 'funktiot.php'; #model vai controller???
 
+$osTuottoLista = array();  #kasataan kaikkien yritysten ekat osaketuotot PER OSAKE
+$osTuotto€ =array();
+$osTuottoPros = array();
 foreach ($hae as $haku) {
     $nimi = $haku['nimi'];
     $liikevaihto = $haku['liikevaihto'];
@@ -20,18 +23,106 @@ foreach ($hae as $haku) {
     $osakkeidenMaara = $haku['kokonaismaara'];
     $osakehinta = $haku['osakehinta'];
     $sijoitus = $haku['sijoitus'];
+    $pituus = COUNT($hae); #lasketaan montako yritystä tietokannassa
+    
 
     $liikevoitto = liikevoitto($liikevaihto, $materiaalit, $henkilosto, $poistot, $muutkulut);
     $voittoEnnenVeroja = voittoEnnenVeroja($liikevoitto, $rahoitus);
     $tilikaudenVoitto = tilikaudenVoitto($voittoEnnenVeroja, $verot);
     $osaketuotto = osaketuotto($tilikaudenVoitto, $osakkeidenMaara); #tilikaudenvoitto/osakkeidenmaara
+    array_push($osTuottoLista,$osaketuotto);
     $osakkeetAlussa = osakkeetAlussa($sijoitus, $osakehinta); #sijoiitus/osakehinta
     $tulos = sipo($osaketuotto, $osakkeetAlussa, $sijoitus); #palauttaa listan $tulos jossa tuotto€ja tuottoPros
     $tuotto€ = $tulos[0]; #poimitaan listasta eka indeksi 
     $tuottoPros = $tulos[1]; #toinen indeksi
+    array_push($osTuotto€, $tuotto€);
+    array_push($osTuottoPros, $tuottoPros);
     $uudetOsakkeet = tuottoVuosittain($tuotto€, $osakehinta);  #lasketaan uusien osakkeiden määrä
-    $yhtmaara = yhteismaara($osakkeetAlussa, $uudetOsakkeet); #lasketaan sijoittajan osakkeiden yhteismäärä
+    $yhtmaara = yhteismaara($osakkeetAlussa, $uudetOsakkeet); #lasketaan sijoittajan osakkeiden yhteismäärä   
+}
+    echo "<table>";
+    echo "<tr>";
+    echo "<th>TIEDOT OSAKKEISTA</th>";
+    foreach ($hae as $haku) {
+    echo "<th> $haku[nimi] </th>"; 
+    }
 
+    echo "</tr>";
+    echo "<tr>";
+    echo "<td>Osakkeiden kokonaismäärä kpl</td>";
+    foreach ($hae as $haku) {
+    echo "<td> $haku[kokonaismaara] </td>";
+    } 
+    echo "</tr>";
+
+    echo "<tr>";
+    echo "<td>Osakkeen hinta €/osake</td>";
+    foreach ($hae as $haku) {
+    echo "<td> $haku[osakehinta] </td>";
+    } 
+    echo "</tr>";
+
+    echo "<tr>";
+    echo "<td>Osakketuotto €/osake</td>";
+    for ($i=0; $i<$pituus; $i++) {
+    echo "<td>" . ROUND($osTuottoLista[$i],2) . "</td>";
+    } 
+    echo "</tr>";
+    "</table>";
+    "<br>";
+
+    echo "<table>";
+    echo "<tr>";
+    echo "<th>SIJOITUSLASKURI</th>";
+    foreach ($hae as $haku) {
+    echo "<th> $haku[nimi] </th>"; 
+    }
+    echo "</tr>";
+
+    echo "<tr>";
+    echo "<td>Sijoitettava summa €</td>";
+    foreach ($hae as $haku) {
+    echo "<td>$haku[sijoitus] </td>";
+    } 
+    echo "</tr>";
+
+    echo "<tr>";
+    echo "<td>Sijoiutksella saadut osakkeet kpl</td>";
+    foreach ($hae as $haku) {
+    echo "<td> $haku[kokonaismaara]</td>";
+    } 
+    echo "</tr>";
+    "</table>";
+    "<br>";
+
+    echo "<table>";
+    echo "<tr>";
+    echo "<th>SIJOITETUN PÄÄOMAN TUOTTO</th>";
+    foreach ($hae as $haku) {
+    echo "<th> $haku[nimi] </th>"; 
+    }
+    echo "</tr>";
+
+    echo "<tr>";
+    echo "<td>Tuotto €</td>";
+    for ($i=0; $i<$pituus; $i++) {
+        echo "<td>" . ROUND($osTuotto€[$i],2) . "</td>";
+        }
+    echo "</tr>";
+
+    echo "<tr>";
+    echo "<td>Tuotto suhteessa sijoitukseen %</td>";
+    for ($i=0; $i<$pituus; $i++) {
+        echo "<td>" . ROUND($osTuottoPros[$i],2) . "</td>";
+        }
+    echo "</tr>";
+    "</table>";
+    "<br>";
+
+
+/*
+    #yllä kokeilut saada tulostukset rinnakkain
+    
     echo "TIEDOT OSAKKEISTA";
     echo "<br>";
     echo "Yrityksen nimi $nimi";
@@ -59,7 +150,7 @@ foreach ($hae as $haku) {
     echo "Tuotto suhteessa sijoitukseen" . " " . ROUND($tulos[1],2) . " %";
     echo "<br>";
     echo "<br>";
-
+    #}
 
     echo "<table>";
     echo "<tr>";
@@ -231,4 +322,4 @@ echo "</tr>";
 echo "</table>"; 
 */
 ?>
-</div>
+
