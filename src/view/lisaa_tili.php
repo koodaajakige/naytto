@@ -1,8 +1,8 @@
 <?php $this->layout('template', ['title' => 'Luo uusi tili'])?>
 
+<form action="" method="POST">
 <h1>Luo uusi tili</h1>
 
-<form action="" method="POST">
   <div>
     <label for="nimi">Nimi:</label>
     <input id="nimi" type="text" name="nimi" value="<?= getValue($formdata,'nimi') ?>">
@@ -23,6 +23,11 @@
     <input type="password" name="salasana2">
   </div>
   <div>
+    <br>
     <input type="submit" name="laheta" value="Luo tili">
   </div>
+  <br>
+  <img src="pictures/tili3.jpg" title="https://getwallpapers.com/wallpaper/full/a/3/0/267366.jpg"; 
+  style="width:330px;height:250px;">
+
 </form>

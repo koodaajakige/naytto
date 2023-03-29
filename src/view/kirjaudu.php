@@ -1,10 +1,8 @@
 <?php $this->layout('template', ['title' => 'Kirjautuminen']) ?>
 
-
+<form action="https://<?= $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] ?>" method="POST">
 
 <h1>Kirjaudu sisään</h1>
-
-<form action="https://<?= $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] ?>" method="POST">
   <div>
     <label>Sähköposti:</label>
     <input type="text" name="email">
@@ -19,5 +17,6 @@
   </div>
   <div class="info">
   <a href="tilaa_vaihtoavain">Salasana unohtunut?</a>.
-</div>
+  </div>
+
 </form>

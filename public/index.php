@@ -50,12 +50,12 @@ switch ($request) {
                 $lisaa = lisaaTiedot($_POST['nimi'], $_POST['liikevaihto'], $_POST['materiaalit'],
                 $_POST['henkilosto'], $_POST['poistot'], $_POST['muutkulut'], $_POST['rahoitus'],
                 $_POST['verot'], $_POST['kokonaismaara'], $_POST['osakehinta'], $_POST['sijoitus']);
-                echo "Tiedot lisätty yrityksen $_POST[nimi] nimellä.";
+                echo $templates->render('tallennusok');
                 break;
-                }
+              }
             else {
                 break;
-            }        
+            }         
         } 
         else {
             echo $templates->render('kirjautumaton');
@@ -127,6 +127,7 @@ switch ($request) {
         }
         else {
         echo $templates->render('kirjautumaton');
+        break;
         }
 
     case '/notfound':

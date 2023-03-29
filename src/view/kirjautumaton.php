@@ -1,3 +1,3 @@
 <?php $this->layout('template', ['title' => 'Etusivu']) ?>
 
-<p>Et ole kirjautunut sisään joten et voi käyttää sijoituskonetta!</p>
+<h1>Kirjaudu sisään käyttääksesi sijoituskonetta!</h1>

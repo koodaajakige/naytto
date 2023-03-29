@@ -1,10 +1,8 @@
 <?php $this->layout('template', ['title' => 'Hae tiedot']); ?>
 
-<h1>Tietojen tulostus tietokannasta</h1>
-
-<p>Tilinpäätöstiedot ja sijoitustiedot</p>
-
 <div class='hae'>
+<br><br>
+
 <?php
 require_once MODEL_DIR . 'funktiot.php'; #model vai controller???
 
@@ -25,7 +23,6 @@ foreach ($hae as $haku) {
     $sijoitus = $haku['sijoitus'];
     $pituus = COUNT($hae); #lasketaan montako yritystä tietokannassa
     
-
     $liikevoitto = liikevoitto($liikevaihto, $materiaalit, $henkilosto, $poistot, $muutkulut);
     $voittoEnnenVeroja = voittoEnnenVeroja($liikevoitto, $rahoitus);
     $tilikaudenVoitto = tilikaudenVoitto($voittoEnnenVeroja, $verot);
@@ -46,8 +43,8 @@ foreach ($hae as $haku) {
     foreach ($hae as $haku) {
     echo "<th> $haku[nimi] </th>"; 
     }
-
     echo "</tr>";
+
     echo "<tr>";
     echo "<td>Osakkeiden kokonaismäärä kpl</td>";
     foreach ($hae as $haku) {
@@ -63,13 +60,12 @@ foreach ($hae as $haku) {
     echo "</tr>";
 
     echo "<tr>";
-    echo "<td>Osakketuotto €/osake</td>";
+    echo "<td>Osaketuotto €/osake</td>";
     for ($i=0; $i<$pituus; $i++) {
     echo "<td>" . ROUND($osTuottoLista[$i],2) . "</td>";
     } 
     echo "</tr>";
     "</table>";
-    "<br>";
 
     echo "<table>";
     echo "<tr>";
@@ -87,7 +83,7 @@ foreach ($hae as $haku) {
     echo "</tr>";
 
     echo "<tr>";
-    echo "<td>Sijoiutksella saadut osakkeet kpl</td>";
+    echo "<td>Sijoituksella saadut osakkeet kpl</td>";
     foreach ($hae as $haku) {
     echo "<td> $haku[kokonaismaara]</td>";
     } 
@@ -117,9 +113,10 @@ foreach ($hae as $haku) {
         }
     echo "</tr>";
     "</table>";
+    
     "<br>";
 
-
+    
 /*
     #yllä kokeilut saada tulostukset rinnakkain
     
@@ -321,5 +318,8 @@ for ($i=0; $i<4; $i++) {
 echo "</tr>";
 echo "</table>"; 
 */
+
 ?>
+</div>
+
 

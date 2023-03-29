@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="fi">
     <head>
-        <title>Show me the money! - <?=$this->e($title)?></title>
+        <link href="styles/styles.css" rel="stylesheet">
+        <title>Sijoituskone - <?=$this->e($title)?></title>
         <meta charset="UTF-8">
     </head>
     <body>
         <header>
             <h1><a href="<?=BASEURL?>">Sijoituskone</a></h1>
             <div class="profile">
+            <br>
         <?php
           if (isset($_SESSION['user'])) {
             echo "<div>$_SESSION[user]</div>";
@@ -19,18 +21,20 @@
       </div>
     </header>
     <div>
-    <ul>
-      <li><a href="etusivu" title="Etusivu">Etusivu</a></li>
-      <li><a href="lisaa" title="Lisaa tiedot">Lisää tiedot</a></li>
-      <li><a href="hae" title="Tulosta tiedot">Tulosta tiedot</a></li>
-      <li><a href="lisaa_tili" title="Luo uusi tili">Luo uusi tili</a></li>
-</ul>
+    <nav>
+      <ul>
+        <li><a href="etusivu" title="Etusivu">Etusivu</a></li>
+        <li><a href="lisaa" title="Lisaa tiedot">Lisää uusi yritys</a></li>
+        <li><a href="tulosta" title="Tulosta tiedot">Näytä sijoitukset</a></li>
+        <li><a href="lisaa_tili" title="Luo uusi tili">Luo uusi tili</a></li>
+      </ul>
+    </nav>
     <section>
         <?=$this->section('content')?>
     </section>
     <footer>
       <hr>
-      <div>Make it rain inc.</div>
+      <div>&copy; Make it rain inc.</div>
     </footer>
   </body>
 </html>

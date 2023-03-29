@@ -8,7 +8,7 @@ $config = array(
         "host" => "localhost"
     ),
     "urls" => array(
-        "baseUrl" => "/~apsalone/naytto"
+        "baseUrl" => "/~knykanen/sijoitusnaytto-dev"
     )
 );
 

@@ -1,10 +1,10 @@
 <?php $this->layout('template', ['title' => 'Salasana unohtunut?']) ?>
 
-<h1>Oletko unohtanut salasanasi?</h1>
-
-<p>Ei hätää, voit vaihtaa unohtuneen salasan tilaamalla vahvistuslinkin sähköpostiisi.</p>
-
 <form action="" method="POST">
+<h1>Oletko unohtanut salasanasi?</h1>
+<p>Ei hätää, voit vaihtaa unohtuneen salasan </p>
+<p>tilaamalla vahvistuslinkin sähköpostiisi.</p>
+
   <div>
     <label for="email">Sähköposti:</label>
     <input id="email" type="email" name="email">

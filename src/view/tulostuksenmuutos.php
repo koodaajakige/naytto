@@ -1,8 +1,9 @@
 <?php $this->layout('template', ['title' => 'Hae tiedot']); ?>
 
-<h1>Tietojen tulostus tietokannasta</h1>
 
-<p>Tilinpäätöstiedot ja sijoitustiedot</p>
+  <h1>Tietojen tulostus tietokannasta</h1>
+  <p>Tilinpäätöstiedot ja sijoitustiedot</p>
+
 
 <div class='hae'>
 <?php
@@ -119,3 +120,6 @@ foreach ($hae as $haku) {
     echo "</table>"; 
     echo "<br>";
 }
+
+?>
+</div>
