@@ -14,6 +14,27 @@ switch ($request) {
     case '/etusivu':
         echo $templates->render('etusivu');
         break;
+
+      case "/aloitus":
+        if (isset($_POST['laheta'])) {
+          require_once CONTROLLER_DIR . 'aloitus.php';
+          if (tarkistaKirjautuminen($_POST['email'],$_POST['salasana'])) {
+            require_once MODEL_DIR . 'henkilo.php';
+            $user = haeHenkilo($_POST['email']);
+            if ($user['vahvistettu']) {
+              session_regenerate_id();
+              $_SESSION['user'] = $user['email'];
+              header("Location: " . $config['urls']['baseUrl']);
+            } else {
+              echo $templates->render('aloitus', [ 'error' => ['virhe' => 'Tili on vahvistamatta! Ole hyvä, ja vahvista tili sähköpostissa olevalla linkillä.']]);
+            }
+          } else {
+            echo $templates->render('aloitus', [ 'error' => ['virhe' => 'Väärä käyttäjätunnus tai salasana!']]);
+          }
+        } else {
+          echo $templates->render('aloitus', [ 'error' => []]);
+        }
+        break;
     
     case "/kirjaudu":
         if (isset($_POST['laheta'])) {
@@ -50,7 +71,7 @@ switch ($request) {
                 $lisaa = lisaaTiedot($_POST['nimi'], $_POST['liikevaihto'], $_POST['materiaalit'],
                 $_POST['henkilosto'], $_POST['poistot'], $_POST['muutkulut'], $_POST['rahoitus'],
                 $_POST['verot'], $_POST['kokonaismaara'], $_POST['osakehinta'], $_POST['sijoitus']);
-                echo $templates->render('tallennusok');
+                header("Location: tallennusok");
                 break;
               }
             else {
@@ -61,6 +82,10 @@ switch ($request) {
             echo $templates->render('kirjautumaton');
             break;
         }
+
+    case '/tallennusok':
+      echo $templates->render('tallennusok');
+      break;
     
     case '/lisaa_tili':
         if (isset($_POST['laheta'])) {

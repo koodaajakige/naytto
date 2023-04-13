@@ -2,8 +2,13 @@
 <html lang="fi">
     <head>
         <link href="styles/styles.css" rel="stylesheet">
-        <title>Sijoituskone - <?=$this->e($title)?></title>
         <meta charset="UTF-8">
+        <title>Sijoituskone - <?=$this->e($title)?></title>
+        <link rel="shortcut icon" href="images/favicon.ico">
+        <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
+        <link rel="manifest" href="images/site.webmanifest">
     </head>
     <body>
         <header>
@@ -15,7 +20,7 @@
             echo "<div>$_SESSION[user]</div>";
             echo "<div><a href='logout'>Kirjaudu ulos</a></div>";
           } else {
-            echo "<div><a href='kirjaudu'>Kirjaudu</a></div>";
+            echo "<div class='kirjaudu'><a href='kirjaudu'>Kirjaudu</a></div>";
           }
         ?>
       </div>

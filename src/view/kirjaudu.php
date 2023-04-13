@@ -18,5 +18,4 @@
   <div class="info">
   <a href="tilaa_vaihtoavain">Salasana unohtunut?</a>.
   </div>
-
 </form>

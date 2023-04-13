@@ -1,9 +1,11 @@
 <?php $this->layout('template', ['title' => 'Salasana unohtunut?']) ?>
 
+<div class="otsikko_ja_teksti">
 <form action="" method="POST">
-<h1>Oletko unohtanut salasanasi?</h1>
-<p>Ei hätää, voit vaihtaa unohtuneen salasan </p>
-<p>tilaamalla vahvistuslinkin sähköpostiisi.</p>
+<h1>Unohtunut salasana?</h1>
+<p>Ei hätää, voit vaihtaa unohtuneen </p>
+<p>salasanan tilaamalla vahvistuslinkin</p> 
+<p>sähköpostiisi.</p>
 
   <div>
     <label for="email">Sähköposti:</label>
@@ -13,3 +15,4 @@
     <input type="submit" name="laheta" value="Lähetä">
   </div>
 </form>
+</div>

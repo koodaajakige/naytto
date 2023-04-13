@@ -23,11 +23,7 @@
     <input type="password" name="salasana2">
   </div>
   <div>
-    <br>
     <input type="submit" name="laheta" value="Luo tili">
   </div>
-  <br>
-  <img src="pictures/tili3.jpg" title="https://getwallpapers.com/wallpaper/full/a/3/0/267366.jpg"; 
-  style="width:330px;height:250px;">
 
 </form>

@@ -1,7 +1,7 @@
 <?php $this->layout('template', ['title' => 'Hae tiedot']); ?>
 
 <div class='hae'>
-<br><br>
+<br>
 
 <?php
 require_once MODEL_DIR . 'funktiot.php'; #model vai controller???
@@ -89,7 +89,6 @@ foreach ($hae as $haku) {
     } 
     echo "</tr>";
     "</table>";
-    "<br>";
 
     echo "<table>";
     echo "<tr>";
@@ -112,11 +111,9 @@ foreach ($hae as $haku) {
         echo "<td>" . ROUND($osTuottoPros[$i],2) . "</td>";
         }
     echo "</tr>";
+   
     "</table>";
-    
-    "<br>";
 
-    
 /*
     #yllä kokeilut saada tulostukset rinnakkain
     
