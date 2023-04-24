@@ -2,9 +2,10 @@
 
 <form action="" method="POST">
 <h1>Lisää yrityksen tiedot</h1>
+<div class="kirjautuminen>
     <div>
         <label>Nimi:</label>
-        <input type="text" name="nimi">
+        <input type="text" name="nimi" id="nimi">
     </div>
     <div>
         <label>Liikevaihto:</label>
@@ -49,5 +50,6 @@
     <div>
         <input type="submit" name="laheta" value="TALLENNA">
     </div>
+</div>
 </form>
 

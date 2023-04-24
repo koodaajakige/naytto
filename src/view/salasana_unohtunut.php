@@ -2,10 +2,11 @@
 
 <div class="otsikko_ja_teksti">
 <form action="" method="POST">
+<br>
 <h1>Unohtunut salasana?</h1>
 <p>Ei hätää, voit vaihtaa unohtuneen </p>
-<p>salasanan tilaamalla vahvistuslinkin</p> 
-<p>sähköpostiisi.</p>
+<p>salasanan tilaamalla </p> 
+<p>vahvistuslinkin sähköpostiisi.</p>
 
   <div>
     <label for="email">Sähköposti:</label>

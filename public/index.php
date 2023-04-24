@@ -10,32 +10,12 @@ $templates = new League\Plates\Engine(TEMPLATE_DIR);
 
 
 switch ($request) {
+    
     case '/':
     case '/etusivu':
         echo $templates->render('etusivu');
         break;
 
-      case "/aloitus":
-        if (isset($_POST['laheta'])) {
-          require_once CONTROLLER_DIR . 'aloitus.php';
-          if (tarkistaKirjautuminen($_POST['email'],$_POST['salasana'])) {
-            require_once MODEL_DIR . 'henkilo.php';
-            $user = haeHenkilo($_POST['email']);
-            if ($user['vahvistettu']) {
-              session_regenerate_id();
-              $_SESSION['user'] = $user['email'];
-              header("Location: " . $config['urls']['baseUrl']);
-            } else {
-              echo $templates->render('aloitus', [ 'error' => ['virhe' => 'Tili on vahvistamatta! Ole hyvä, ja vahvista tili sähköpostissa olevalla linkillä.']]);
-            }
-          } else {
-            echo $templates->render('aloitus', [ 'error' => ['virhe' => 'Väärä käyttäjätunnus tai salasana!']]);
-          }
-        } else {
-          echo $templates->render('aloitus', [ 'error' => []]);
-        }
-        break;
-    
     case "/kirjaudu":
         if (isset($_POST['laheta'])) {
           require_once CONTROLLER_DIR . 'kirjaudu.php';
@@ -57,8 +37,29 @@ switch ($request) {
         }
         break;
 
+    case "/aloitus":
+      if (isset($_POST['laheta'])) {
+        require_once CONTROLLER_DIR . 'aloitus.php';
+        if (tarkistaKirjautuminen($_POST['email'],$_POST['salasana'])) {
+          require_once MODEL_DIR . 'henkilo.php';
+          $user = haeHenkilo($_POST['email']);
+          if ($user['vahvistettu']) {
+            session_regenerate_id();
+            $_SESSION['user'] = $user['email'];
+            header("Location: " . $config['urls']['baseUrl']);
+          } else {
+            echo $templates->render('aloitus', [ 'error' => ['virhe' => 'Tili on vahvistamatta! Ole hyvä, ja vahvista tili sähköpostissa olevalla linkillä.']]);
+          }
+        } else {
+          echo $templates->render('aloitus', [ 'error' => ['virhe' => 'Väärä käyttäjätunnus tai salasana!']]);
+        }
+      } else {
+        echo $templates->render('aloitus', [ 'error' => []]);
+      }
+      break;
+
     case "/logout":
-        require_once CONTROLLER_DIR . 'kirjaudu.php';
+        require_once CONTROLLER_DIR . 'aloitus.php';
         logout();
         header("Location: " . $config['urls']['baseUrl']);
         break;
@@ -154,6 +155,57 @@ switch ($request) {
         echo $templates->render('kirjautumaton');
         break;
         }
+    
+    case '/yhteydenotto2':
+      if (isset($_POST['laheta'])) {
+        $emailErr = $viestiErr = "";
+        $email = $viesti = "";
+      if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        if (empty($_POST["email"])) {
+          $emailErr = "Kirjoita sähköpostiosoitteesi.";
+        } else {
+          $email = test_input($_POST["email"]);
+        }
+        if (empty($_POST["viesti"])) {
+          $viestiErr = "Kirjoita viesti.";
+        } else {
+          $comment = test_input($_POST["viesti"]);
+        }
+        require_once HELPERS_DIR . 'testaus.php';
+        $email = test_input($_POST["email"]);
+        $viesti = test_input($_POST["viesti"]);
+        $headers = "Content-Type: text/html; charset=UTF-8";
+        $extraheaders = "From: "." <".$email.">"."Content-Type: text/html; charset=UTF-8";
+        mail( "kirsi.nykanen@edu.sasky.fi", "Palaute",
+        $viesti, $email, $extraheaders);
+        header( "Location: kiitos" );
+        break;
+      }
+    else {
+      echo $templates->render('yhteydenotto');
+      break;
+    }
+  }
+    
+    #toimiva case:
+    case '/yhteydenotto':
+      if (isset($_POST['laheta'])) {
+        require_once HELPERS_DIR . 'testaus.php';
+        $email = test_input($_POST["email"]);
+        $viesti = test_input($_POST["viesti"]);
+        $extraheaders = "From: "." <".$email.">"."Content-Type: text/html; charset=UTF-8";
+        mail( "kirsi.nykanen@edu.sasky.fi", "Palaute", $viesti, $email, $extraheaders);
+        header( "Location: kiitos" );
+        break;
+      }
+    else {
+      echo $templates->render('yhteydenotto');
+      break;
+    }
+
+    case '/kiitos':
+      echo $templates->render('kiitos');
+      break;
 
     case '/notfound':
         echo $templates->render('notfound');

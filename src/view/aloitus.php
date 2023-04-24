@@ -12,18 +12,18 @@
     </head>
     <body>
       <header>
-            <h1><a href="<?=BASEURL?>">Sijoituskone</a></h1>
-            <div class="profile">
-            <br>
-           </div>
+        <h1><a href="<?=BASEURL?>">Sijoituskone</a></h1>
+        <div class="profile">
+        <br>
+        </div>
       </header>
 
 <div class="esittely_teksti">
-    <br>
+    <br><br><br>
     <p>Sijoituskone on palvelu, jolla voit arvioida </p>
     <p>sijoituksesi kannattavuutta.</p>
     <p>Kirjaudu käyttääksesi tätä huikeaa palvelua!</p>
-  <br>
+  <br><br>
 </div>
 <section>
 <form action="https://<?= $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] ?>" method="POST">

@@ -1,7 +1,9 @@
-<?php $this->layout('template', ['title' => 'Kirjautuminen']) ?>
+<?php $this->layout('template', ['title' => 'Kirjaudu'])?>
 
+<div class="kirjautuminen">
+<section>
 <form action="https://<?= $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] ?>" method="POST">
-
+<br>
 <h1>Kirjaudu sisään</h1>
   <div>
     <label>Sähköposti:</label>
@@ -18,4 +20,27 @@
   <div class="info">
   <a href="tilaa_vaihtoavain">Salasana unohtunut?</a>.
   </div>
-</form>
+  <div class="info">
+  <a href="lisaa_tili">Luo uusi tili</a>.
+  </div>
+  <br>
+  </form>
+</section>
+
+<div class="yhteys_teksti">
+  <p>Ongelmia kirjautumisessa? </p>
+  <p>Ota yhteyttä asiakaspalveluumme: </p>
+  <p>asiakaspalvelu@be22koodaajat.fi </p>
+  <p>tai p. 0600 123 456 </p>
+  <p>(ark klo 9-16, 1,20€/min + ppm)</p>
+  <br>
+</div>
+
+</div>
+
+
+
+  
+
+
+

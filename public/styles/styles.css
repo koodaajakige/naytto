@@ -15,8 +15,8 @@ html {
 
 body {
   background-color: #efeded;
-  min-height: 95vh;
-  min-width: 50vh;
+  min-height: 115vh;
+  min-width: 60vh;
   max-width: max-content;
   margin: 1rem auto;
   box-shadow: 0px 0px 25px rgba(0,0,0,0.5);
@@ -39,7 +39,7 @@ header h1{
   font-weight: 700;
   font-size: 2.8rem;
   font-weight: normal;
-  margin: 0.2rem 0rem 0.2rem 12.5rem;
+  margin: 0.2rem 0rem 0rem 12.5rem;
 }
 
 header a {
@@ -57,14 +57,15 @@ h1 {
   flex-direction: row;
   justify-content: center;
   margin-top: 1.8rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
   margin-right: 0.2rem;
   font-size: 1.2em;
 }
 
 .kirjaudu {
   margin-top: 1rem;
-  margin-left: 2.4rem;
+  margin-left: 1rem;
+  margin-right: 7.4rem;
 }
 
 nav {
@@ -95,25 +96,30 @@ section {
   flex-direction: row;
   justify-content: center;
   font-size: 1.3rem;
-  padding-left: 0.5em;
+  
 }
 
 .otsikko_ja_teksti {
-  margin: 0.7em 0em 0em 0.5em;
+  margin: 0.7em 0em 0em 0em;
   font-size: 1.2rem;
+  margin: 0.5em;
 }
 
 .otsikko_ja_teksti p{
-  margin-left: 0rem;
+  margin-left: 1rem;
   margin-right: 0rem;
 }
 
-.esittely_teksti p{
+.esittely_teksti{
   font-family: 'Nunito', sans-serif;
   font-size: 1.2rem;
-  margin-top: 0.5em;
-  margin-left: 11.5em;
-  margin-right: 10em;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.esittely_teksti p{
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -123,13 +129,19 @@ section {
   font-family: 'Nunito', sans-serif;
   font-size: 0.9rem;
   margin-top: 0.5em;
-  margin-left: 20em;
-  margin-right: 20em;
+  margin-left: 1em;
+  margin-right: 1em;
   display: flex;
   flex-direction: row;
   justify-content: center;
 }
 
+.kirjautuminen {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: -0.5em;
+}
 
 form > div{
   display: flex;
@@ -170,14 +182,25 @@ input[type=submit]:hover {
   color: #fff;
 }
 
+textarea {
+  border: 1px solid #999;
+  border-radius: 0.3rem;
+  padding: 0.23rem;
+  font-size: 1.1rem;
+  width: 20rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
 table {
   border: 1px solid black;
   background-color: #d2d2d2;
   display: flex;
   flex-direction: row;
   justify-content: center;
-  max-width: 69rem;
-  margin: 2rem;
+  max-width: 60rem;
+  margin: 1rem;
   margin-top: 0rem;
   margin-left: 0.4rem;
   margin-right: 0.9rem;
