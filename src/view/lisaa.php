@@ -1,11 +1,11 @@
 <?php $this->layout('template', ['title' => 'Lisaa tiedot']) ?>
 
+<div class="kirjautuminen">
 <form action="" method="POST">
 <h1>Lisää yrityksen tiedot</h1>
-<div class="kirjautuminen>
     <div>
         <label>Nimi:</label>
-        <input type="text" name="nimi" id="nimi">
+        <input type="text" name="nimi">
     </div>
     <div>
         <label>Liikevaihto:</label>

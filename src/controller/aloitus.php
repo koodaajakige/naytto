@@ -16,11 +16,9 @@
 
     // Käyttäjää ei löytynyt tai salasana oli väärin. 
     return false;
-
   }
 
   function logout() {
-
     // Tyhjennetään istuntomuuttujat.
     $_SESSION = array();
 

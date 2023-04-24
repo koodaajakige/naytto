@@ -23,7 +23,7 @@
 </div>
 <div>
   <label>Viesti:</label>
-  <textarea name="viesti" rows="8" cols="30" wrap="virtual" required>
+  <textarea name="viesti" rows="8" cols="30" required>
   </textarea>
 </div>
 <div>

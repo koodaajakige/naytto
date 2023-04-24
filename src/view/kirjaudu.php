@@ -1,7 +1,6 @@
 <?php $this->layout('template', ['title' => 'Kirjaudu'])?>
 
 <div class="kirjautuminen">
-<section>
 <form action="https://<?= $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] ?>" method="POST">
 <br>
 <h1>Kirjaudu sisään</h1>
@@ -23,9 +22,7 @@
   <div class="info">
   <a href="lisaa_tili">Luo uusi tili</a>.
   </div>
-  <br>
   </form>
-</section>
 
 <div class="yhteys_teksti">
   <p>Ongelmia kirjautumisessa? </p>
