@@ -37,27 +37,6 @@ switch ($request) {
         }
         break;
 
-    case "/aloitus":
-      if (isset($_POST['laheta'])) {
-        require_once CONTROLLER_DIR . 'aloitus.php';
-        if (tarkistaKirjautuminen($_POST['email'],$_POST['salasana'])) {
-          require_once MODEL_DIR . 'henkilo.php';
-          $user = haeHenkilo($_POST['email']);
-          if ($user['vahvistettu']) {
-            session_regenerate_id();
-            $_SESSION['user'] = $user['email'];
-            header("Location: " . $config['urls']['baseUrl']);
-          } else {
-            echo $templates->render('aloitus', [ 'error' => ['virhe' => 'Tili on vahvistamatta! Ole hyvä, ja vahvista tili sähköpostissa olevalla linkillä.']]);
-          }
-        } else {
-          echo $templates->render('aloitus', [ 'error' => ['virhe' => 'Väärä käyttäjätunnus tai salasana!']]);
-        }
-      } else {
-        echo $templates->render('aloitus', [ 'error' => []]);
-      }
-      break;
-
     case "/logout":
         require_once CONTROLLER_DIR . 'aloitus.php';
         logout();
@@ -156,39 +135,45 @@ switch ($request) {
         break;
         }
     
-    case '/yhteydenotto2':
-      if (isset($_POST['laheta'])) {
-        $emailErr = $viestiErr = "";
-        $email = $viesti = "";
-      if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        if (empty($_POST["email"])) {
-          $emailErr = "Kirjoita sähköpostiosoitteesi.";
-        } else {
-          $email = test_input($_POST["email"]);
-        }
-        if (empty($_POST["viesti"])) {
-          $viestiErr = "Kirjoita viesti.";
-        } else {
-          $comment = test_input($_POST["viesti"]);
-        }
-        require_once HELPERS_DIR . 'testaus.php';
-        $email = test_input($_POST["email"]);
-        $viesti = test_input($_POST["viesti"]);
-        $headers = "Content-Type: text/html; charset=UTF-8";
-        $extraheaders = "From: "." <".$email.">"."Content-Type: text/html; charset=UTF-8";
-        mail( "kirsi.nykanen@edu.sasky.fi", "Palaute",
-        $viesti, $email, $extraheaders);
-        header( "Location: kiitos" );
-        break;
-      }
-    else {
-      echo $templates->render('yhteydenotto');
-      break;
-    }
-  }
-    
-    #toimiva case:
     case '/yhteydenotto':
+        //Kun lähetä-nappia on painettu, otetaan valmisteltavaksi lähetettävä viesti
+        if (isset($_POST['laheta'])) {
+          require_once CONTROLLER_DIR . 'viesti.php';
+          require_once HELPERS_DIR . 'form.php';
+          //Viestin siistiminen ylimääräisistä merkeistä
+          $formdata = siistiTiedot($_POST);
+          //Viestin ja email-osoitteen virhetarkistus
+          $tulos = tarkistaViesti($formdata);
+          //Viestin lähetetään, ellei sisältänyt virheitä
+          if ($tulos['status'] == "200") {
+            $email = getValue($formdata,'email');
+            $viesti = getValue($formdata,'viesti');
+            $headers = "MIME-Version: 1.0" . "\r\n";
+            $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+            $headers .= 'From: ' .$email. "\r\n";
+            $result = mail( "kirsi.nykanen@edu.sasky.fi", "Palaute", $viesti, $email, $headers);
+            //Mikäli viestin lähetys ei onnistu, ilmoitetaan virheestä virhe-sivulla
+            if(!$result) {
+              header( "Location: virhe" );
+              break;
+            //Kun viestin lähetys onnistuu, ohjaudutaan kiitos-sivulle 
+            } else {
+              header( "Location: kiitos" );
+        }
+          }
+          //Mikäli viesti sisältää virheitä, ilmoitetaan niistä lomakkeella
+          else
+            echo $templates->render('yhteydenotto', ['formdata' => $formdata, 'error' => $tulos['error']]);
+            break;
+          }
+        //Mikäli Lähetä-nappia ei olla painettu, renderöidään yhteydenotto-lomakesivu
+        else {
+          echo $templates->render('yhteydenotto', ['formdata' => [], 'error' => []]);
+          break;
+        }
+      
+    #toimiva case-vaihtoehto:
+    case '/yhteydenotto2':
       if (isset($_POST['laheta'])) {
         require_once HELPERS_DIR . 'testaus.php';
         $email = test_input($_POST["email"]);

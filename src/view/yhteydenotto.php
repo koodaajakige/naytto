@@ -2,7 +2,6 @@
 
 <div class="esittely_teksti p">
 <div>
-<p></p>
 <h1>Heräsikö kysymyksiä?</h1>
 <br>
 <p>Ota yhteyttä asiakaspalveluumme: </p>
@@ -15,22 +14,24 @@
 <br>
 </div>
 
-<section>
 <form method="post" action="yhteydenotto">
 <div>
   <label>Sähköpostiosoite:</label>
-  <input name="email" type="text" required>
+  <input name="email" type="text" value="<?= getValue($formdata,'email')?>">
+    <div class="error"><?= getValue($error,'email');?></div>
 </div>
 <div>
   <label>Viesti:</label>
-  <textarea name="viesti" rows="8" cols="30" required>
-  </textarea>
+  <textarea name="viesti" rows="8" cols="30" 
+  value="<?=getValue($formdata,'viesti')?>"></textarea><div class="error"><?= getValue($error,'viesti');?></div>
 </div>
 <div>
   <input type="submit" name="laheta" value="Lähetä">
 </div>
-
+<!-- Lomakkeen tyhjennysnappi
+<div>
+  <input type="reset" name="laheta" value="Tyhjennä">
+</div>-->
 </form>
-</section>
 
 </div>
