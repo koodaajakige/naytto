@@ -1,5 +1,4 @@
 <?php
-
 # tarkistetaan lomaakkeella syötettyjen tietojen oikeellisuus
 # email oikeaa muotoa ja salasanat täsmää
 
@@ -12,14 +11,14 @@ function lisaaTili ($formdata, $baseurl='') {
     #lomaketietojen tarkistus, jos muoto ei ole oikea, virhelistaan virhekuvaus
     #jos kaikki läpi virhelista lopus tyhjä
     if (!isset($formdata['nimi']) || !$formdata['nimi']) {
-        $virhe['nimi'] = "Anna nimesi.";
+        $error['nimi'] = "Anna nimesi.";
     } else {
         if (!preg_match("/^[- '\p{L}]+$/u", $formdata['nimi'])) {
-            $virhe['nimi'] = "Syötä nimesi ilman erikoismerkkejä";
+            $error['nimi'] = "Syötä nimesi ilman erikoismerkkejä";
         }
     }
 
-    //tarkistetaan sposti määritelty ja oikea muoto
+    #tarkistetaan sposti määritelty ja oikea muoto eikä se ole varattu
     if (!isset($formdata['email']) || !$formdata['email']) {
         $error['email'] = "Anna sähköpostiosoitteesi.";
     } else {
@@ -32,7 +31,7 @@ function lisaaTili ($formdata, $baseurl='') {
         }
     }
 
-    // tark salasanat annettu ja keskennään samat JOS KAKSI SALASANAA!
+    #tarkistetaan annetut salasanat ja että ovat keskennään samat
     if (isset($formdata['salasana1']) && $formdata['salasana1'] &&
         isset($formdata['salasana2']) && $formdata['salasana2']) {
         if ($formdata['salasana1'] != $formdata['salasana2']) {
@@ -42,19 +41,17 @@ function lisaaTili ($formdata, $baseurl='') {
         $error['salasana'] = "Syötä salasanasi kahteen kertaan.";
     }
 
-    // Lisätään tiedot tietokantaan, jos edellä syötettyissä
-    // tiedoissa ei ollut virheitä eli error-taulukosta ei
-    // löydy virhetekstejä.
+    #jos ei virheitä, lisätään henkilö tietokantaan
     if (!$error) {
 
-    // Haetaan lomakkeen tiedot omiin muuttujiinsa.
-    // Salataan salasana myös samalla.
+    #haetaan lomakkeen tiedot omiin muuttujiinsa
+    #salataan salasana 
     $nimi = $formdata['nimi'];
     $email = $formdata['email'];
     $salasana = password_hash($formdata['salasana1'], PASSWORD_DEFAULT);
 
-    // Lisätään henkilö tietokantaan. Jos lisäys onnistui,
-    // tulee palautusarvona lisätyn henkilön id-tunniste.
+    #lisätään henkilö tietokantaan
+    #palautusarvona lisätyn henkilön id-tunniste, jos onnistui
     $idhenkilo = lisaaHenkilo($nimi,$email,$salasana);
 
     // Palautetaan JSON-tyyppinen taulukko, jossa:
@@ -70,23 +67,18 @@ function lisaaTili ($formdata, $baseurl='') {
     //  error    = Taulukko, jossa on lomaketarkistuksessa
     //             esille tulleet virheet.
 
-    // Tarkistetaan onnistuiko henkilön tietojen lisääminen.
-    // Jos idhenkilo-muuttujassa on positiivinen arvo,
-    // onnistui rivin lisääminen. Muuten liäämisessä ilmeni
-    // ongelma.
+    #Tarkistetaan onnistuiko henkilön tietojen lisääminen.
     if ($idhenkilo) {
 
-    // Luodaan käyttäjälle aktivointiavain ja muodostetaan
-    // aktivointilinkki.
+    #Luodaan käyttäjälle aktivointiavain, muodostetaan aktivointilinkki.
     require_once(HELPERS_DIR . "salainen.php");
     $avain = generateActivationCode($email);
     $url = 'https://' . $_SERVER['HTTP_HOST'] . $baseurl . "/vahvista?key=$avain";
 
-    // Päivitetään aktivointiavain tietokantaan ja lähetetään
-    // käyttäjälle sähköpostia. Jos tämä onnistui, niin palautetaan
-    // palautusarvona tieto tilin onnistuneesta luomisesta. Muuten
-    // palautetaan virhekoodi, joka ilmoittaa, että jokin
-    // lisäyksessä epäonnistui.
+    #Päivitetään aktivointiavain tietokantaan ja lähetetään
+    #käyttäjälle sähköpostia. Jos tämä onnistui, niin palautetaan
+    #palautusarvona tieto tilin onnistuneesta luomisesta. Muuten
+    #palautetaan virhekoodi, joka ilmoittaa, että jokin epäonnistui.
     if (paivitaVahvavain($email,$avain) && lahetaVahvavain($email,$url)) {
       return [
         "status" => 200,

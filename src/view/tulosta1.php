@@ -7,7 +7,7 @@
 <h3> Valitse vertailtavat yritykset:</h3>
 
 <?php
-require_once MODEL_DIR . 'funktiot.php'; 
+require_once MODEL_DIR . 'funktiot.php'; #model vai controller???
 require_once MODEL_DIR . 'tulosta.php';
 
 $firmat = haeTiedot();
@@ -18,36 +18,28 @@ $firmat = haeTiedot();
     <?php
     foreach ($firmat as $firma) { #checkbox täpätyt listana 'nimi[]' jotta toimii foreach loopissa.
         echo "<div class='checkbox'>
-                <input type='checkbox' name='nimi[]' value='$firma[nimi]'> $firma[nimi] <br>
+                <input type='checkbox' name='nimi[]' value='$firma[nimi]'> $firma[nimi]
               </div>"; 
-    } #"tulosta" nimisiä nappuloita on kaksi ja klikattava tuottaa tuloksen switchiin. Kaikki inputit täytyy olla
-      # saman formin sisällä, jos tekee erilliset niin yksi tai useampi tieto jää postaamatta eikä tulostus toimi.  
-    ?>   
+    }
+    ?>
+<br><br>
+</div>
 
-<br>
 <div class="vertaa">
-    <input type="submit" value="Perustiedot" name="tulosta"><br>
-    <input type="submit" value="Sijoitustiedot" name="tulosta">
+  <input type="submit" value="LÄHETÄ" name="submit">
 </div>
-</form> 
+<br>
+</form>
 
-</div>
 <?php
 
-    echo "<br>";
+    $valitut = []; #tästä ajetaan tulostustiedot
+    $nimet = []; #apulista täpätyille nimille.
+    $viri = array(); #apulista
 
-if (isset($_POST['tulosta']) AND isset($_POST['nimi']))  { #nappia painettu JA RUUTU TÄPÄTTY
-     $lomake = $_POST['tulosta'];
-    
-    switch($lomake){
-        case 'Perustiedot':
-            require_once MODEL_DIR . 'funktiot.php'; 
-            require_once MODEL_DIR . 'tulosta.php';
-           
-            $valitut = []; #tästä ajetaan tulostustiedot
-            $nimet = []; #apulista täpätyille nimille.
-            $viri = array(); #apulista
-            
+if (isset($_POST['submit'])) { #nappia painettu
+    if (isset($_POST['nimi'])) {   #jos ruutu on täpätty
+        
         foreach ($_POST['nimi'] as $yritys) {
             array_push($nimet, $yritys); #täpätyt nimet listaan
         }
@@ -59,7 +51,10 @@ if (isset($_POST['tulosta']) AND isset($_POST['nimi']))  { #nappia painettu JA R
         for ($j=0; $j<COUNT($viri); $j++) {
             $valitut = array_merge($valitut, $viri[$j]); #yhdistetään yritysten tiedot ja ylim listataso saadaan pois.
         }       
-    
+    }
+    else { 
+        echo "<h4>Valitse ainakin yksi vaihtoehto</h4>";
+    }
 
         $osTuottoLista = array();  #kasataan kaikkien yritysten ekat osaketuotot PER OSAKE
         $osTuotto€ = array();
@@ -72,7 +67,7 @@ if (isset($_POST['tulosta']) AND isset($_POST['nimi']))  { #nappia painettu JA R
             $tilikaudenVoitto = tilikaudenVoitto($voittoEnnenVeroja, $arvo['verot']);
             $osaketuotto = osaketuotto($tilikaudenVoitto, $arvo['kokonaismaara']); #tilikaudenvoitto/osakkeidenmaara
             array_push($osTuottoLista,$osaketuotto);
-            $omatOsakkeetAlussa = osakkeetAlussa($arvo['sijoitus'], $arvo['osakehinta']); #sijoitus/osakehinta
+            $omatOsakkeetAlussa = osakkeetAlussa($arvo['sijoitus'], $arvo['osakehinta']); #sijoiitus/osakehinta
             $tulos = sipo($osaketuotto, $omatOsakkeetAlussa, $arvo['sijoitus']); #palauttaa listan $tulos jossa tuotto€ja tuottoPros
             $tuotto€ = $tulos[0]; #poimitaan listasta eka indeksi 
             $tuottoPros = $tulos[1]; #toinen indeksi
@@ -82,7 +77,9 @@ if (isset($_POST['tulosta']) AND isset($_POST['nimi']))  { #nappia painettu JA R
             array_push($maara, $uudetOsakkeet); #lisätään uusien osakkeiden määrä listalle
             $yhtmaara = yhteismaara($omatOsakkeetAlussa, $uudetOsakkeet); #lasketaan sijoittajan osakkeiden yhteismäärä   
         }
-        
+
+        if (isset($_POST['nimi'])) {
+        echo "<br>";
         echo "<div class='otsake'>TIEDOT OSAKKEISTA</div>";
         echo "<table>";
         echo "<tr>";
@@ -133,7 +130,7 @@ if (isset($_POST['tulosta']) AND isset($_POST['nimi']))  { #nappia painettu JA R
         echo "</tr>";
 
         echo "<tr>";
-        echo "<td>Sijlituksella saadut osakkeet kpl</td>";
+        echo "<td>Sijoituksella saadut osakkeet kpl</td>";
         foreach ($valitut as $arvo) {
         echo "<td>" . ROUND($arvo['sijoitus']/$arvo['osakehinta'],2) . "</td>";
         } 
@@ -165,27 +162,20 @@ if (isset($_POST['tulosta']) AND isset($_POST['nimi']))  { #nappia painettu JA R
         echo "</tr>";
         echo "</table>";
         echo "<br>";
-        break;
+        }
+    }
+?>
 
-    case 'Sijoitustiedot':
-        require_once MODEL_DIR . 'funktiot.php'; 
-        require_once MODEL_DIR . 'tulosta.php';
-        $nimet = array();
-        $valitut = array();
-        $viri = array();
+<?php
+if ((isset($_POST['nimi'])) && ($_POST['submit'])) {  #nappi tulee, jos perustiedot tulostettu
+    echo '<div class="vertaa"><form action="" method="POST">
+    <input type="submit" name="lisatiedot" value="Lisätiedot">
+    </form><br></div>';
+    $valitut = haeTiedot();
+}
 
-        foreach ($_POST['nimi'] as $yritys) {
-            array_push($nimet, $yritys); #täpätyt nimet listaan
-            }
-    
-        for ($i=0; $i<COUNT($nimet); $i++) {
-            array_push($viri, haeYritys($nimet[$i])); #apulistaan haettujen yritysten tiedot, jää yksi listataso liikaa!!!
-            }
-            
-        for ($j=0; $j<COUNT($viri); $j++) {
-            $valitut = array_merge($valitut, $viri[$j]); #yhdistetään yritysten tiedot ja ylim listataso saadaan pois.
-            }       
-    
+    if (isset($_POST['lisatiedot'])) {
+        $valitut = haeTiedot();
     
     echo "<div class='otsake'>TUOTTOJEN SIJOITUS VUOSI VUODELTA</div>";
     echo "<hr>";
@@ -250,13 +240,6 @@ for ($i=0; $i<4; $i++) {
 }
 echo "</tr>";
 echo "</table>"; 
-}
-break;
- 
-}
-} else { 
-    if (isset($_POST['tulosta']) AND !isset($_POST['nimi'])){#nappia painettu mutta ruutua ei ole täpätty
-        echo "<h4>Valitse ainakin yksi vaihtoehto</h4>";
 }
 }
 

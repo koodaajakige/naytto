@@ -38,30 +38,32 @@ switch ($request) {
         break;
 
     case "/logout":
-        require_once CONTROLLER_DIR . 'aloitus.php';
+        require_once CONTROLLER_DIR . 'kirjaudu.php';
         logout();
         header("Location: " . $config['urls']['baseUrl']);
         break;
 
-    case '/lisaa':
-        if (isset($_SESSION['user'])) {
-            echo $templates->render('lisaa');
-            if (isset($_POST['laheta'])) {
-                require_once MODEL_DIR . 'lisaa.php';
-                $lisaa = lisaaTiedot($_POST['nimi'], $_POST['liikevaihto'], $_POST['materiaalit'],
-                $_POST['henkilosto'], $_POST['poistot'], $_POST['muutkulut'], $_POST['rahoitus'],
-                $_POST['verot'], $_POST['kokonaismaara'], $_POST['osakehinta'], $_POST['sijoitus']);
-                header("Location: tallennusok");
-                break;
+        case '/lisaa':
+          if (isset($_SESSION['user'])) { #tarkistetaan onko käyttäjä kirjautunut sisään
+              if (isset($_POST['laheta'])) {
+                  $formdata = siistiTiedot($_POST);
+                  require_once CONTROLLER_DIR . 'tuloslaskelma.php';
+                  $tulos = tarkistaTiedot($formdata);
+                  if ($tulos['status'] == "200") {
+                      echo $templates->render('tallennusok');
+                      break;
+                  }
+                  echo $templates ->render('lisaa', ['formdata' => $formdata, 'error' => $tulos['error']]);
+                  break;
+              
+              } else {
+                  echo $templates->render('lisaa', ['formdata' => [], 'error' =>[]]);
+                  break;
               }
-            else {
-                break;
-            }         
-        } 
-        else {
-            echo $templates->render('kirjautumaton');
-            break;
-        }
+          } else {
+              echo $templates->render('kirjautumaton');
+          }
+          break;
 
     case '/tallennusok':
       echo $templates->render('tallennusok');
@@ -70,7 +72,7 @@ switch ($request) {
     case '/lisaa_tili':
         if (isset($_POST['laheta'])) {
             $formdata = siistiTiedot($_POST);
-            require_once CONTROLLER_DIR . 'tili.php'; #uusi_tili tk-funktio
+            require_once CONTROLLER_DIR . 'tili.php';
             $tulos = lisaaTili($formdata,$config['urls']['baseUrl']);
             if ($tulos['status'] == '200') {
             echo $templates->render('tili_luotu', ['formdata' => $formdata]);
@@ -136,15 +138,15 @@ switch ($request) {
         }
     
     case '/yhteydenotto':
-        //Kun lähetä-nappia on painettu, otetaan valmisteltavaksi lähetettävä viesti
+        #Kun lähetä-nappia on painettu, otetaan valmisteltavaksi lähetettävä viesti
         if (isset($_POST['laheta'])) {
           require_once CONTROLLER_DIR . 'viesti.php';
           require_once HELPERS_DIR . 'form.php';
-          //Viestin siistiminen ylimääräisistä merkeistä
+          #Viestin siistiminen ylimääräisistä merkeistä
           $formdata = siistiTiedot($_POST);
-          //Viestin ja email-osoitteen virhetarkistus
+          #Viestin ja email-osoitteen virhetarkistus
           $tulos = tarkistaViesti($formdata);
-          //Viestin lähetetään, ellei sisältänyt virheitä
+          #Viestin lähetetään, ellei sisältänyt virheitä
           if ($tulos['status'] == "200") {
             $email = getValue($formdata,'email');
             $viesti = getValue($formdata,'viesti');
@@ -152,42 +154,26 @@ switch ($request) {
             $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
             $headers .= 'From: ' .$email. "\r\n";
             $result = mail( "kirsi.nykanen@edu.sasky.fi", "Palaute", $viesti, $email, $headers);
-            //Mikäli viestin lähetys ei onnistu, ilmoitetaan virheestä virhe-sivulla
+            #Mikäli viestin lähetys ei onnistu, ilmoitetaan virheestä virhe-sivulla
             if(!$result) {
               header( "Location: virhe" );
               break;
-            //Kun viestin lähetys onnistuu, ohjaudutaan kiitos-sivulle 
+            #Kun viestin lähetys onnistuu, ohjaudutaan kiitos-sivulle 
             } else {
               header( "Location: kiitos" );
         }
           }
-          //Mikäli viesti sisältää virheitä, ilmoitetaan niistä lomakkeella
+          #Mikäli viesti sisältää virheitä, ilmoitetaan niistä lomakkeella
           else
             echo $templates->render('yhteydenotto', ['formdata' => $formdata, 'error' => $tulos['error']]);
             break;
           }
-        //Mikäli Lähetä-nappia ei olla painettu, renderöidään yhteydenotto-lomakesivu
+        #Mikäli Lähetä-nappia ei olla painettu, renderöidään yhteydenotto-lomakesivu
         else {
           echo $templates->render('yhteydenotto', ['formdata' => [], 'error' => []]);
           break;
         }
       
-    #toimiva case-vaihtoehto:
-    case '/yhteydenotto2':
-      if (isset($_POST['laheta'])) {
-        require_once HELPERS_DIR . 'testaus.php';
-        $email = test_input($_POST["email"]);
-        $viesti = test_input($_POST["viesti"]);
-        $extraheaders = "From: "." <".$email.">"."Content-Type: text/html; charset=UTF-8";
-        mail( "kirsi.nykanen@edu.sasky.fi", "Palaute", $viesti, $email, $extraheaders);
-        header( "Location: kiitos" );
-        break;
-      }
-    else {
-      echo $templates->render('yhteydenotto');
-      break;
-    }
-
     case '/kiitos':
       echo $templates->render('kiitos');
       break;
@@ -232,80 +218,7 @@ switch ($request) {
         echo $templates->render('notfound');
 
     }
-//require_once '../src/init.php';
 
-
-// Siistitään polku urlin alusta ja mahdolliset parametrit urlin lopusta.
-//$request = str_replace($config['urls']['baseUrl'],'',$_SERVER['REQUEST_URI']);
-//$request = strtok($request, '?');
-
-// Luodaan uusi Plates-olio ja kytketään se sovelluksen sivupohjiin.
-//$templates = new League\Plates\Engine(TEMPLATE_DIR);
-
-// Selvitetään mitä sivua on kutsuttu ja suoritetaan sivua vastaava 
-// käsittelijä.
-
-//if ($request === '/' || $request === '/etusivu') {
-//    echo $templates->render('etusivu');
-//}   else if ($request === '/lisaa') {
-//    if (isset($_POST['laheta'])) {
-//        require_once MODEL_DIR . 'lisaa.php';
-//        $lisaa = lisaaTiedot($_POST['nimi'], $_POST['liikevaihto'], $_POST['materiaalit'],
-//        $_POST['henkilosto'], $_POST['poistot'], $_POST['muutkulut'], $_POST['rahoitus'],
-//        $_POST['verot'], $_POST['kokonaismaara'], $_POST['osakehinta'], $_POST['sijoitus']);
-//        echo "Tiedot lisätty yrityksen $_POST[nimi] nimellä.";
-//        
-//    } else {
-//        echo $templates->render('lisaa');
-//    }
-//    
-//}   else if ($request === '/tulosta') {
-//    echo $templates->render('tulosta');
-
-//}   else if ($request === '/hae') {
-//    require_once MODEL_DIR . 'hae.php';
-//   $hae = haeTiedot();
-//    echo $templates->render('hae', ['hae' => $hae]);
-   
-//}   else if ($request === '/lisaa_tili') {
-//    if (isset($_POST['laheta'])) {
-//        $formdata = siistiTiedot($_POST);
-//        require_once MODEL_DIR . 'henkilo.php'; 
-//        $tulos = lisaaHenkilo($formdata);
-//        $salasana = password_hash($_POST['salasana1'], PASSWORD_DEFAULT);
-//        $id = lisaaHenkilo($formdata['nimi'], $formdata['email'], $salasana);
-//        if($tulos['status']=="200") {
-//        echo $templates->render('tili_luotu');
-//        }
-
-        
-    
-//    } else {
-//        echo $templates ->render('lisaa_tili');
-//    }
-//}    else if ($request === '/kirjaudu') {
-//        if (isset($_POST['laheta'])) {
-//            require_once CONTROLLER_DIR . 'kirjaudu.php';
-//            if (tarkistaKirjautuminen($_POST['email'],$_POST['salasana'])) {
-//                session_regenerate_id;
-//                $_SESSION['user'] = $_POST['email'];
-//                header("Location: " . $config['urls']['baseUrl']);
-//            } else {
-//              echo $templates->render('kirjaudu', [ 'error' => ['virhe' => 'Väärä käyttäjätunnus tai salasana!']]);
-//            }
-//          } else {
-//            echo $templates->render('kirjaudu', [ 'error' => []]);
-//          }
-//}     else if ($request === '/logout') {
-//        require_once CONTROLLER_DIR . 'kirjaudu.php';
-//        logout();
-//        header("Location: " . $config['urls']['baseUrl']);
-//         
-
-
-//} else {
-//    echo $templates->render('notfound');
-//}
 ?>
 
 
