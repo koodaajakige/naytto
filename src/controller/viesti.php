@@ -37,7 +37,7 @@ function tarkistaViesti($formdata) {
   $viesti = $formdata['viesti'];
 
   // Palautetaan JSON-tyyppinen taulukko, jossa:
-  //  status   = Koodi, joka kertoo lisäyksen onnistumisen.
+  //  status   = Koodi, joka kertoo tarkistuksen läpäisystä.
   //             Hyvin samankaltainen kuin HTTP-protokollan
   //             vastauskoodi.
   //             200 = OK
