@@ -2,7 +2,7 @@
 
 <div class="kirjautuminen">
 <br><br>
-<h2>Tilinpäätös- ja sijoitustiedot</h2>
+<h2>Osake- ja sijoitustiedot</h2>
 <br>
 <h3> Valitse vertailtavat yritykset:</h3>
 
@@ -27,14 +27,11 @@ $firmat = haeTiedot();
 
 <br>
 <div class="vertaa">
-    <input type="submit" value="Perustiedot" name="tulosta">
-    <input type="submit" value="Sijoitustiedot" name="tulosta">
-    
-    
+    <input type="submit" value="Alkusijoitukset" name="tulosta">
+    <input type="submit" value="5v tuotto" name="tulosta">
 </div>
 </form> 
 </div>
-
 <?php
     echo "<br>";
 
@@ -42,7 +39,21 @@ if (isset($_POST['tulosta']) AND isset($_POST['nimi']))  { #nappia painettu JA R
      $lomake = $_POST['tulosta'];
     
     switch($lomake){
-        case 'Perustiedot':
+        case 'POISTA':
+            require_once MODEL_DIR . 'funktiot.php'; 
+            require_once MODEL_DIR . 'tulosta.php';
+            require_once MODEL_DIR . 'henkilo.php';
+           
+            $nimet = []; #apulista täpätyille nimille.
+
+            foreach ($_POST['nimi'] as $yritys) {
+                $nimet = array_push($nimet, $yritys); #täpätyt nimet listaan
+                poistaYritys($nimet);
+            }
+            echo "<h4>Yrityksen poisto onnistui!</h4>";
+        break;
+
+        case 'Alkusijoitukset':
             require_once MODEL_DIR . 'funktiot.php'; 
             require_once MODEL_DIR . 'tulosta.php';
            
@@ -62,7 +73,6 @@ if (isset($_POST['tulosta']) AND isset($_POST['nimi']))  { #nappia painettu JA R
             $valitut = array_merge($valitut, $viri[$j]); #yhdistetään yritysten tiedot ja ylim listataso saadaan pois.
         }       
     
-
         $osTuottoLista = array();  #kasataan kaikkien yritysten ekat osaketuotot PER OSAKE
         $osTuotto€ = array();
         $osTuottoPros = array();
@@ -110,7 +120,7 @@ if (isset($_POST['tulosta']) AND isset($_POST['nimi']))  { #nappia painettu JA R
         echo "</tr>";
 
         echo "<tr>";
-        echo "<td>Osakketuotto €/osake</td>";
+        echo "<td>Osaketuotto €/osake</td>";
         for ($i=0; $i<COUNT($valitut); $i++) {
         echo "<td>" . ROUND($osTuottoLista[$i],2) . "</td>";
         } 
@@ -135,7 +145,7 @@ if (isset($_POST['tulosta']) AND isset($_POST['nimi']))  { #nappia painettu JA R
         echo "</tr>";
 
         echo "<tr>";
-        echo "<td>Sijlituksella saadut osakkeet kpl</td>";
+        echo "<td>Sijoituksella saadut osakkeet kpl</td>";
         foreach ($valitut as $arvo) {
         echo "<td>" . ROUND($arvo['sijoitus']/$arvo['osakehinta'],2) . "</td>";
         } 
@@ -169,7 +179,7 @@ if (isset($_POST['tulosta']) AND isset($_POST['nimi']))  { #nappia painettu JA R
         echo "<br>";
         break;
 
-    case 'Sijoitustiedot':
+    case '5v tuotto':
         require_once MODEL_DIR . 'funktiot.php'; 
         require_once MODEL_DIR . 'tulosta.php';
         $nimet = array();
@@ -187,7 +197,6 @@ if (isset($_POST['tulosta']) AND isset($_POST['nimi']))  { #nappia painettu JA R
         for ($j=0; $j<COUNT($viri); $j++) {
             $valitut = array_merge($valitut, $viri[$j]); #yhdistetään yritysten tiedot ja ylim listataso saadaan pois.
             }       
-    
     
     echo "<div class='otsake'>TUOTTOJEN SIJOITUS VUOSI VUODELTA</div>";
     echo "<hr>";
