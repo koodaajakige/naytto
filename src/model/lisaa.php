@@ -8,7 +8,6 @@ function lisaaTiedot ($nimi, $liikevaihto, $materiaalit, $henkilosto, $poistot, 
             rahoitus, verot, kokonaismaara, osakehinta, sijoitus) VALUE (?,?,?,?,?,?,?,?,?,?,?);',
             [$nimi, $liikevaihto, $materiaalit, $henkilosto, $poistot, $muutkulut, 
             $rahoitus, $verot, $osakkeidenMaara, $osakehinta, $sijoitus]);
-    #return DB::lastInsertedId(); #????
 }
 
 ?>

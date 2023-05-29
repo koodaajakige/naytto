@@ -1,15 +1,15 @@
 <?php
+
 # tarkistetaan lomaakkeella syötettyjen tietojen oikeellisuus
 # email oikeaa muotoa ja salasanat täsmää
-
 function lisaaTili ($formdata, $baseurl='') {
-    #tuodaaan uusi_tili funktiot, joilla voidaan lisätä tili tk:aan
-    require_once  (MODEL_DIR . 'henkilo.php');
+    # tuodaaan uusi_tili funktiot, joilla voidaan lisätä tili tk:aan
+    require_once (MODEL_DIR . 'henkilo.php');
     #alustetaan virhetaulukko, palautuu tyhjänä tai virheillä täytettynä
     $error = [];
 
     #lomaketietojen tarkistus, jos muoto ei ole oikea, virhelistaan virhekuvaus
-    #jos kaikki läpi virhelista lopus tyhjä
+    #jos kaikki menee läpi, virhelista lopussa tyhjä
     if (!isset($formdata['nimi']) || !$formdata['nimi']) {
         $error['nimi'] = "Anna nimesi.";
     } else {
@@ -18,20 +18,20 @@ function lisaaTili ($formdata, $baseurl='') {
         }
     }
 
-    #tarkistetaan sposti määritelty ja oikea muoto eikä se ole varattu
+    # tarkistetaan sposti, määritelty ja oikea muoto
     if (!isset($formdata['email']) || !$formdata['email']) {
         $error['email'] = "Anna sähköpostiosoitteesi.";
     } else {
-        if (!filter_var($formdata['email'], FILTER_VALIDATE_EMAIL)) {
-            $error['email'] = "Sähköpostiosoite on virheellisessä muodossa";
-        }   else {
-            if (haeTiliSahkopostilla($formdata['email'])) {
-                $error['email'] = "Sähköpostiosoite on jo käytössä.";
-            }         
-        }
+      if (!filter_var($formdata['email'], FILTER_VALIDATE_EMAIL)) {
+        $error['email'] = "Sähköpostiosoite on virheellisessä muodossa";
+      } else {
+        if (haeHenkiloSahkopostilla($formdata['email'])) {
+          $error['email'] = "Sähköpostiosoite on jo käytössä.";
+        }         
+      }
     }
 
-    #tarkistetaan annetut salasanat ja että ovat keskennään samat
+    #  tarkistetaan annetut salasanat ja keskenään samat 
     if (isset($formdata['salasana1']) && $formdata['salasana1'] &&
         isset($formdata['salasana2']) && $formdata['salasana2']) {
         if ($formdata['salasana1'] != $formdata['salasana2']) {
@@ -41,44 +41,22 @@ function lisaaTili ($formdata, $baseurl='') {
         $error['salasana'] = "Syötä salasanasi kahteen kertaan.";
     }
 
-    #jos ei virheitä, lisätään henkilö tietokantaan
+    # jos ei virheitä lisätään henkilö
     if (!$error) {
-
-    #haetaan lomakkeen tiedot omiin muuttujiinsa
-    #salataan salasana 
+    
     $nimi = $formdata['nimi'];
     $email = $formdata['email'];
     $salasana = password_hash($formdata['salasana1'], PASSWORD_DEFAULT);
 
-    #lisätään henkilö tietokantaan
-    #palautusarvona lisätyn henkilön id-tunniste, jos onnistui
     $idhenkilo = lisaaHenkilo($nimi,$email,$salasana);
-
-    // Palautetaan JSON-tyyppinen taulukko, jossa:
-    //  status   = Koodi, joka kertoo lisäyksen onnistumisen.
-    //             Hyvin samankaltainen kuin HTTP-protokollan
-    //             vastauskoodi.
-    //             200 = OK
-    //             400 = Bad Request
-    //             500 = Internal Server Error
-    //  id       = Lisätyn rivin id-tunniste.
-    //  formdata = Lisättävän henkilön lomakedata. Sama, mitä
-    //             annettiin syötteenä.
-    //  error    = Taulukko, jossa on lomaketarkistuksessa
-    //             esille tulleet virheet.
-
-    #Tarkistetaan onnistuiko henkilön tietojen lisääminen.
+    
+    # lähetetään aktivointikoodi annettuun sähköpostiosoitteeseen
     if ($idhenkilo) {
 
-    #Luodaan käyttäjälle aktivointiavain, muodostetaan aktivointilinkki.
     require_once(HELPERS_DIR . "salainen.php");
     $avain = generateActivationCode($email);
     $url = 'https://' . $_SERVER['HTTP_HOST'] . $baseurl . "/vahvista?key=$avain";
 
-    #Päivitetään aktivointiavain tietokantaan ja lähetetään
-    #käyttäjälle sähköpostia. Jos tämä onnistui, niin palautetaan
-    #palautusarvona tieto tilin onnistuneesta luomisesta. Muuten
-    #palautetaan virhekoodi, joka ilmoittaa, että jokin epäonnistui.
     if (paivitaVahvavain($email,$avain) && lahetaVahvavain($email,$url)) {
       return [
         "status" => 200,
@@ -100,19 +78,18 @@ function lisaaTili ($formdata, $baseurl='') {
 
 } else {
 
-    // Lomaketietojen tarkistuksessa ilmeni virheitä.
+    # Lomaketietojen tarkistuksessa ilmeni virheitä.
     return [
       "status" => 400,
       "data"   => $formdata,
       "error"  => $error
     ];
-
   }
 }
 
 function lahetaVahvavain($email,$url) {
   $message = "Terve!\n\n" . 
-             "Olet luonut tilin sijoutuskoneeseen tällä\n" . 
+             "Olet luonut tilin sijoituskoneeseen tällä\n" . 
              "sähköpostiosoitteella. Klikkaamalla alla olevaa\n" . 
              "linkkiä vahvistat käyttämäsi sähköpostiosoitteen\n" .
              "ja pääset laskemaan sijoituksiasi koneella.\n\n" . 

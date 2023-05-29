@@ -102,28 +102,28 @@ switch ($request) {
         break;
 
     case "/tilaa_vaihtoavain":
-        $formdata = siistiTiedot($_POST);
-        if (isset($formdata['laheta'])) {    
-            require_once MODEL_DIR . 'henkilo.php';
-            $user = haeHenkilo($formdata['email']);
-            if ($user) {
+      $formdata = siistiTiedot($_POST);
+      if (isset($formdata['laheta'])) {    
+          require_once MODEL_DIR . 'henkilo.php';
+          $user = haeHenkilo($formdata['email']);
+          if ($user) {
               require_once CONTROLLER_DIR . 'tili.php';
               $tulos = luoVaihtoavain($formdata['email'],$config['urls']['baseUrl']);
               if ($tulos['status'] == "200") {
-                echo $templates->render('vaihtoavaimen_lahetys');
-                break;
+                  echo $templates->render('vaihtoavaimen_lahetys');
+                  break;
               }
               echo $templates->render('virhe');
               break;
-            } else {
+          } else {
               echo $templates->render('vaihtoavaimen_lahetys');
               break;
-            }
-    
-        } else {
+          }
+      
+      } else {
           echo $templates->render('salasana_unohtunut');
-        }
-        break;        
+      }
+      break;        
 
     case '/tulosta':
         if (isset($_SESSION['user'])) {
@@ -138,37 +138,38 @@ switch ($request) {
         }
     
     case '/yhteydenotto':
-        #Kun lähetä-nappia on painettu, otetaan valmisteltavaksi lähetettävä viesti
+        # Kun lähetä-nappia on painettu yhteydenottolomakkeella, 
+        # otetaan valmisteltavaksi lähetettävä viesti
         if (isset($_POST['laheta'])) {
           require_once CONTROLLER_DIR . 'viesti.php';
           require_once HELPERS_DIR . 'form.php';
-          #Viestin siistiminen ylimääräisistä merkeistä
+          # Viestin siistiminen ylimääräisistä merkeistä
           $formdata = siistiTiedot($_POST);
-          #Viestin ja email-osoitteen virhetarkistus
+          # Viestin ja email-osoitteen virhetarkistus
           $tulos = tarkistaViesti($formdata);
-          #Viestin lähetetään, ellei sisältänyt virheitä
+          # Viesti lähetetään, ellei sisältänyt virheitä
           if ($tulos['status'] == "200") {
             $email = getValue($formdata,'email');
             $viesti = getValue($formdata,'viesti');
             $headers = "MIME-Version: 1.0" . "\r\n";
             $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
             $headers .= 'From: ' .$email. "\r\n";
-            $result = mail( "kirsi.nykanen@edu.sasky.fi", "Palaute", $viesti, $email, $headers);
-            #Mikäli viestin lähetys ei onnistu, ilmoitetaan virheestä virhe-sivulla
+            $result = mail("kirsi.nykanen@edu.sasky.fi", "Palaute", $viesti, $headers);
+            # Mikäli viestin lähetys ei onnistu, ilmoitetaan virheestä virhe-sivulla
             if(!$result) {
               header( "Location: virhe" );
               break;
-            #Kun viestin lähetys onnistuu, ohjaudutaan kiitos-sivulle 
+            # Kun viestin lähetys onnistuu, ohjataan kiitos-sivulle 
             } else {
               header( "Location: kiitos" );
         }
           }
-          #Mikäli viesti sisältää virheitä, ilmoitetaan niistä lomakkeella
+          # Mikäli viesti sisältää virheitä, ilmoitetaan niistä lomakkeella
           else
             echo $templates->render('yhteydenotto', ['formdata' => $formdata, 'error' => $tulos['error']]);
             break;
           }
-        #Mikäli Lähetä-nappia ei olla painettu, renderöidään yhteydenotto-lomakesivu
+        # Mikäli Lähetä-nappia ei olla painettu, renderöidään yhteydenotto-lomakesivu
         else {
           echo $templates->render('yhteydenotto', ['formdata' => [], 'error' => []]);
           break;
@@ -182,37 +183,37 @@ switch ($request) {
         echo $templates->render('notfound');
         break;
     
-        case "/reset":
-          $resetkey = $_GET['key'];
-          require_once MODEL_DIR . 'henkilo.php';
-          $rivi = tarkistaVaihtoavain($resetkey);
-          if ($rivi) {
-            if ($rivi['aikaikkuna'] < 0) {
-              echo $templates->render('reset_virhe');
-              break;
-            }
-          } else {
-            echo $templates->render('reset_virhe');
-            break;
-          }
+    case "/reset":
+      $resetkey = $_GET['key'];
+      require_once MODEL_DIR . 'henkilo.php';
+      $rivi = tarkistaVaihtoavain($resetkey);
+      if ($rivi) {
+        if ($rivi['aikaikkuna'] < 0) {
+          echo $templates->render('reset_virhe');
+          break;
+        }
+      } else {
+        echo $templates->render('reset_virhe');
+        break;
+      }
+      
+      $formdata = siistiTiedot($_POST);
+      if (isset($formdata['laheta'])) {
+      require_once CONTROLLER_DIR . 'tili.php';
+      $tulos = resetoiSalasana($formdata,$resetkey);
+        if ($tulos['status'] == "200") {
+        echo $templates->render('reset_valmis');
+        break;
+      }
+      echo $templates->render('reset_lomake', ['error' => $tulos['error']]);
+      break;
 
-          $formdata = cleanArrayData($_POST);
-          if (isset($formdata['laheta'])) {
-          require_once CONTROLLER_DIR . 'tili.php';
-          $tulos = resetoiSalasana($formdata,$resetkey);
-            if ($tulos['status'] == "200") {
-            echo $templates->render('reset_valmis');
-            break;
-          }
-          echo $templates->render('reset_lomake', ['error' => $tulos['error']]);
-          break;
-    
-          } else {
-            echo $templates->render('reset_lomake', ['error' => '']);
-            break;
-          }
-    
-          break;
+      } else {
+        echo $templates->render('reset_lomake', ['error' => '']);
+        break;
+      }
+
+      break;
     
     default:
         echo $templates->render('notfound');

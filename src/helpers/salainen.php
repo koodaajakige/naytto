@@ -7,5 +7,5 @@
   function generateResetCode($text='') {
     return generateActivationCode($text);
   }
-
+  
 ?>

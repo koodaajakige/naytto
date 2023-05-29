@@ -126,7 +126,7 @@ section {
 }
 
 .otsikko_ja_teksti p{
-  margin-left: 1.5rem;
+  margin-left: 1.2rem;
   margin-right: 0rem;
 }
 
@@ -195,7 +195,7 @@ input[type=submit]{
   padding: 0.23em;
   border-radius: 0.25em;
   border-color: #999;
-  width: 8rem;
+  width: 8.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -215,7 +215,7 @@ input[type=reset]{
   padding: 0.23em;
   border-radius: 0.25em;
   border-color: #999;
-  width: 8rem;
+  width: 8.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -243,9 +243,11 @@ input[type=reset]:hover {
 .vertaa {
   display: flex;
   flex-direction: row;
-  justify-content: center;
-  margin-left: 0rem;
-  margin-right: 6rem;
+  justify-items: center;
+  margin: 0rem;
+  margin-left: 1.35rem;
+  margin-right: 0rem;
+  margin-top: 1rem;
 }
 
 textarea {
@@ -279,7 +281,7 @@ table {
 
 th {
    height: 60px;
-   width: 200px;
+   width: 375px;
    text-align: left;
    background-color: #747474;
    color: white;

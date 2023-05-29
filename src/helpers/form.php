@@ -1,5 +1,5 @@
 <?php
-
+#taulukkotietojen siistiminen
 function siistiTiedot ($lista=[]) {
     $tulos = array();
     foreach ($lista as $avain => $arvo) {

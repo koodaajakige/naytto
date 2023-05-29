@@ -16,24 +16,26 @@ $firmat = haeTiedot();
 <div class="yritykset">
 <form method="post" action="">
     <?php
-    foreach ($firmat as $firma) { #checkbox täpätyt listana 'nimi[]' jotta toimii foreach loopissa.
+    foreach ($firmat as $firma) { # checkbox täpätyt listana 'nimi[]' jotta toimii foreach loopissa.
         echo "<div class='checkbox'>
-                <input type='checkbox' name='nimi[]' value='$firma[nimi]'> $firma[nimi] <br>
+                <input type='checkbox' name='nimi[]' value='$firma[nimi]'> $firma[nimi]
               </div>"; 
-    } #"tulosta" nimisiä nappuloita on kaksi ja klikattava tuottaa tuloksen switchiin. Kaikki inputit täytyy olla
-      # saman formin sisällä, jos tekee erilliset niin yksi tai useampi tieto jää postaamatta eikä tulostus toimi.  
+    } # "tulosta" nimisiä nappuloita on kaksi ja klikattava tuottaa tuloksen switchiin. 
+      # Kaikki inputit täytyy olla saman formin sisällä, jos tekee erilliset,
+      # niin yksi tai useampi tieto jää postaamatta eikä tulostus toimi.  
     ?>   
 
 <br>
 <div class="vertaa">
-    <input type="submit" value="Perustiedot" name="tulosta"><br>
+    <input type="submit" value="Perustiedot" name="tulosta">
     <input type="submit" value="Sijoitustiedot" name="tulosta">
+    
+    
 </div>
 </form> 
-
 </div>
-<?php
 
+<?php
     echo "<br>";
 
 if (isset($_POST['tulosta']) AND isset($_POST['nimi']))  { #nappia painettu JA RUUTU TÄPÄTTY
