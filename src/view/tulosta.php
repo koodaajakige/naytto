@@ -39,20 +39,6 @@ if (isset($_POST['tulosta']) AND isset($_POST['nimi']))  { #nappia painettu JA R
      $lomake = $_POST['tulosta'];
     
     switch($lomake){
-        case 'POISTA':
-            require_once MODEL_DIR . 'funktiot.php'; 
-            require_once MODEL_DIR . 'tulosta.php';
-            require_once MODEL_DIR . 'henkilo.php';
-           
-            $nimet = []; #apulista täpätyille nimille.
-
-            foreach ($_POST['nimi'] as $yritys) {
-                $nimet = array_push($nimet, $yritys); #täpätyt nimet listaan
-                poistaYritys($nimet);
-            }
-            echo "<h4>Yrityksen poisto onnistui!</h4>";
-        break;
-
         case 'Alkusijoitukset':
             require_once MODEL_DIR . 'funktiot.php'; 
             require_once MODEL_DIR . 'tulosta.php';
