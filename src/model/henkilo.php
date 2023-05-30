@@ -39,9 +39,4 @@
     return DB::run ('SELECT * FROM henkilo2 WHERE email =?;', [$email])->fetchAll();
   }
 
-  function poistaYritys ($nimet) {
-    return DB::run ('DELETE FROM sijoitus WHERE nimi =?;', [$nimet])->fetchAll();
-  }
-
-
 ?>

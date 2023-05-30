@@ -9,6 +9,7 @@
 <?php
 require_once MODEL_DIR . 'funktiot.php'; 
 require_once MODEL_DIR . 'tulosta.php';
+require_once HELPERS_DIR . 'DB.php';
 
 $firmat = haeTiedot();
 ?>
@@ -37,7 +38,7 @@ $firmat = haeTiedot();
 
 if (isset($_POST['tulosta']) AND isset($_POST['nimi']))  { #nappia painettu JA RUUTU TÄPÄTTY
      $lomake = $_POST['tulosta'];
-    
+     
     switch($lomake){
         case 'Alkusijoitukset':
             require_once MODEL_DIR . 'funktiot.php'; 
@@ -185,7 +186,6 @@ if (isset($_POST['tulosta']) AND isset($_POST['nimi']))  { #nappia painettu JA R
             }       
     
     echo "<div class='otsake'>TUOTTOJEN SIJOITUS VUOSI VUODELTA</div>";
-    echo "<hr>";
     foreach ($valitut as $arvo) {
         $maara2 = array();
         $euro = array();
