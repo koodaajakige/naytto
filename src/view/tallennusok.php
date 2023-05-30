@@ -6,11 +6,6 @@
   <P>Näytä sijoitukset -välilehdellä.</p>
 </div>
 
-<?php
-//echo "<h1>";
-//echo "Tiedot lisätty yrityksen $_POST[nimi] nimellä.";
-//echo "</h1>";
-?>
 
 
 

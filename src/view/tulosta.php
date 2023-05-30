@@ -9,7 +9,6 @@
 <?php
 require_once MODEL_DIR . 'funktiot.php'; 
 require_once MODEL_DIR . 'tulosta.php';
-require_once HELPERS_DIR . 'DB.php';
 
 $firmat = haeTiedot();
 ?>
