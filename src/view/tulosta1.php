@@ -30,6 +30,8 @@ $firmat = haeTiedot();
 <div class="vertaa">
 <input type="submit" value="Alkusijoitukset" name="tulosta"><br>
 <input type="submit" value="5v tuotto" name="tulosta">
+<!-- Lisäominaisuus, mikäli halutaan poistaa yritys:
+    <input type="submit" value="Poista yritys" name="tulosta"> -->
 </div>
 </form> 
 </div>
@@ -45,14 +47,14 @@ if (isset($_POST['tulosta']) AND isset($_POST['nimi']))  { #nappia painettu JA R
             $valitut = []; #tästä ajetaan tulostustiedot
         
             foreach ($_POST['nimi'] as $yritys) {
-                $valitut = array_merge($valitut, haeYritys($yritys)); #täpätyt tiedot listaan
+                $valitut = array_merge($valitut, haeYritys($yritys)); #täpätyt tiedot listaan   
             }
 
             $osTuottoLista = array();  #kasataan kaikkien yritysten ekat osaketuotot PER OSAKE
             $osTuotto€ = array();
             $osTuottoPros = array();
             $maara = array();
-
+            
             foreach ($valitut as $arvo) {
                 $liikevoitto = liikevoitto($arvo['liikevaihto'], $arvo['materiaalit'], $arvo['henkilosto'], $arvo['poistot'], $arvo['muutkulut']);
                 $voittoEnnenVeroja = voittoEnnenVeroja($liikevoitto, $arvo['rahoitus']);
@@ -69,14 +71,12 @@ if (isset($_POST['tulosta']) AND isset($_POST['nimi']))  { #nappia painettu JA R
                 array_push($maara, $uudetOsakkeet); #lisätään uusien osakkeiden määrä listalle
                 $yhtmaara = yhteismaara($omatOsakkeetAlussa, $uudetOsakkeet); #lasketaan sijoittajan osakkeiden yhteismäärä   
             }
-
-            if (COUNT($valitut) > 5) {
-                echo "<h4>Ole hyvä ja valitse max 5 yritystä</h4>";
-                echo "<br>";
+            if (COUNT($valitut)>5){
+                echo "Ole hyvä ja valitse korkeintaan 5 tulostettavaa yritystä";
                 break;
             }
-        
             echo "<div class='otsake'>TIEDOT OSAKKEISTA</div>";
+            echo "<br>";
             echo "<table>";
             echo "<tr>";
             echo "<th></th>";
@@ -126,7 +126,7 @@ if (isset($_POST['tulosta']) AND isset($_POST['nimi']))  { #nappia painettu JA R
             echo "</tr>";
 
             echo "<tr>";
-            echo "<td>Sijoituksella saadut osakkeet kpl</td>";
+            echo "<td>Sijlituksella saadut osakkeet kpl</td>";
             foreach ($valitut as $arvo) {
             echo "<td>" . ROUND($arvo['sijoitus']/$arvo['osakehinta'],2) . "</td>";
             } 
@@ -159,21 +159,16 @@ if (isset($_POST['tulosta']) AND isset($_POST['nimi']))  { #nappia painettu JA R
             echo "</table>";
             echo "<br>";
             break;
-
+            
         case '5v tuotto':
             $valitut = array();
 
             foreach ($_POST['nimi'] as $yritys) {
                 $valitut = array_merge($valitut, haeYritys($yritys)); #täpätyt tiedot listaan
             }   
-            
-            if (COUNT($valitut) > 5) {
-                echo "<h4>Ole hyvä ja valitse max 5 yritystä</h4>";
-                echo "<br>";
-                break;
-            }
-            
+        
             echo "<div class='otsake'>TUOTTOJEN SIJOITUS VUOSI VUODELTA</div>";
+            echo "<hr>";
 
             foreach ($valitut as $arvo) {
                 $maara2 = array();
@@ -190,7 +185,12 @@ if (isset($_POST['tulosta']) AND isset($_POST['nimi']))  { #nappia painettu JA R
                 $tuottoPros = $tulos[1]; #toinen indeksi
                 $uudetOsakkeet = tuottoVuosittain($tuotto€, $arvo['osakehinta']); #lasketaan uusien osakkeiden määrä
                 $yhtmaara = yhteismaara($omatOsakkeetAlussa, $uudetOsakkeet); #lasketaan sijoittajan osakkeiden yhteismäärä  
-            
+                
+                if (COUNT($valitut)>5){
+                    echo "Ole hyvä ja valitse korkeintaan 5 tulostettavaa yritystä";
+                    break;
+                }
+
                 echo "<table>";
                 echo "<tr>";
                     echo "<th>$arvo[nimi]</th>";
@@ -237,7 +237,18 @@ if (isset($_POST['tulosta']) AND isset($_POST['nimi']))  { #nappia painettu JA R
                 echo "</table>"; 
                 }
                 break;
-                
+
+        /* Lisäominaisuus, mikäli halutaan poistaa yritys.
+        case 'Poista yritys':
+        require_once MODEL_DIR . 'tulosta.php';
+        $nimet = []; #apulista täpätyille nimille.
+        foreach ($_POST['nimi'] as $yritys) {
+        array_push($nimet, $yritys); #täpätyt nimet listaan
+        poistaYritys($yritys);
+        }
+        echo "<h4>Yrityksen poisto onnistui!</h4>";
+        break;*/
+
         }
 } else { 
     if (isset($_POST['tulosta']) AND !isset($_POST['nimi'])){#nappia painettu mutta ruutua ei ole täpätty
@@ -246,3 +257,4 @@ if (isset($_POST['tulosta']) AND isset($_POST['nimi']))  { #nappia painettu JA R
 }
 
 ?>
+</div>
