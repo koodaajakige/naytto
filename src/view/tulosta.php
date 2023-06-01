@@ -30,6 +30,8 @@ $firmat = haeTiedot();
 <div class="vertaa">
 <input type="submit" value="Alkusijoitukset" name="tulosta"><br>
 <input type="submit" value="5v tuotto" name="tulosta">
+<!-- Lisäominaisuus, mikäli halutaan poistaa yritys:
+    <input type="submit" value="Poista yritys" name="tulosta"> -->
 </div>
 </form> 
 </div>
@@ -109,7 +111,7 @@ if (isset($_POST['tulosta']) AND isset($_POST['nimi']))  { #nappia painettu JA R
             echo "</table>";
             echo "<br>";
         
-            echo "SIJOITUSLASKURI";
+            echo "<div class='otsake'>SIJOITUSLASKURI</div>";
             echo "<table>";
             echo "<tr>";
             echo "<th></th>";
@@ -134,7 +136,7 @@ if (isset($_POST['tulosta']) AND isset($_POST['nimi']))  { #nappia painettu JA R
             echo "</table>";
             echo "<br>";
 
-            echo "SIJOITETUN PÄÄOMAN TUOTTO";
+            echo "<div class='otsake'>SIJOITETUN PÄÄOMAN TUOTTO</div>";
             echo "<table>";
             echo "<tr>";
             echo "<th></th>";
@@ -237,6 +239,17 @@ if (isset($_POST['tulosta']) AND isset($_POST['nimi']))  { #nappia painettu JA R
                 echo "</table>"; 
                 }
                 break;
+
+        /* Lisäominaisuus, mikäli halutaan poistaa yritys.
+        case 'Poista yritys':
+        require_once MODEL_DIR . 'tulosta.php';
+        $nimet = []; #apulista täpätyille nimille.
+        foreach ($_POST['nimi'] as $yritys) {
+        array_push($nimet, $yritys); #täpätyt nimet listaan
+        poistaYritys($yritys);
+        }
+        echo "<h4>Yrityksen poisto onnistui!</h4>";
+        break;*/
                 
         }
 } else { 
