@@ -4,7 +4,7 @@ function siistiTiedot ($lista=[]) {
     $tulos = array();
     foreach ($lista as $avain => $arvo) {
         $siistitty = trim($arvo);   #poistaa tyhjät merkit alusta ja lopusta mm. sarkain, välilyönti ja rivinvaihto
-        $siistitty = stripslashes($siistitty); #poistaa merkkien edestä / ohjausmerkin
+        $siistitty = stripslashes($siistitty); #poistaa merkkien edestä / -ohjausmerkin
         $tulos[$avain] = $siistitty;
     }
     return $tulos;
@@ -13,7 +13,7 @@ function siistiTiedot ($lista=[]) {
 #taulukkotietojen tulostus
 function getValue($arvot, $avain) {
     if (array_key_exists($avain, $arvot)) {
-        return htmlspecialchars($arvot[$avain]);
+        return htmlspecialchars($arvot[$avain]); #muuntaa erikoismerkit HTML-kokonaisuuksiksi
     }else {
         return null;
     }

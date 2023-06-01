@@ -43,27 +43,27 @@ switch ($request) {
         header("Location: " . $config['urls']['baseUrl']);
         break;
 
-        case '/lisaa':
-          if (isset($_SESSION['user'])) { #tarkistetaan onko käyttäjä kirjautunut sisään
-              if (isset($_POST['laheta'])) {
-                  $formdata = siistiTiedot($_POST);
-                  require_once CONTROLLER_DIR . 'tuloslaskelma.php';
-                  $tulos = tarkistaTiedot($formdata);
-                  if ($tulos['status'] == "200") {
-                      echo $templates->render('tallennusok');
-                      break;
-                  }
-                  echo $templates ->render('lisaa', ['formdata' => $formdata, 'error' => $tulos['error']]);
-                  break;
-              
-              } else {
-                  echo $templates->render('lisaa', ['formdata' => [], 'error' =>[]]);
+    case '/lisaa':
+      if (isset($_SESSION['user'])) { #tarkistetaan onko käyttäjä kirjautunut sisään
+          if (isset($_POST['laheta'])) {
+              $formdata = siistiTiedot($_POST);
+              require_once CONTROLLER_DIR . 'tuloslaskelma.php';
+              $tulos = tarkistaTiedot($formdata);
+              if ($tulos['status'] == "200") {
+                  echo $templates->render('tallennusok');
                   break;
               }
+              echo $templates ->render('lisaa', ['formdata' => $formdata, 'error' => $tulos['error']]);
+              break;
+          
           } else {
-              echo $templates->render('kirjautumaton');
+              echo $templates->render('lisaa', ['formdata' => [], 'error' =>[]]);
+              break;
           }
-          break;
+      } else {
+          echo $templates->render('kirjautumaton');
+      }
+      break;
 
     case '/tallennusok':
       echo $templates->render('tallennusok');

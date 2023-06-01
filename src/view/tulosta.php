@@ -7,7 +7,7 @@
 <h3> Valitse vertailtavat yritykset:</h3>
 
 <?php
-require_once MODEL_DIR . 'funktiot.php'; 
+require_once CONTROLLER_DIR . 'funktiot.php'; 
 require_once MODEL_DIR . 'tulosta.php';
 
 $firmat = haeTiedot();
@@ -40,7 +40,7 @@ if (isset($_POST['tulosta']) AND isset($_POST['nimi']))  { #nappia painettu JA R
      
     switch($lomake){
         case 'Alkusijoitukset':
-            require_once MODEL_DIR . 'funktiot.php'; 
+            require_once CONTROLLER_DIR . 'funktiot.php'; 
             require_once MODEL_DIR . 'tulosta.php';
            
             $valitut = []; #tästä ajetaan tulostustiedot
@@ -166,7 +166,7 @@ if (isset($_POST['tulosta']) AND isset($_POST['nimi']))  { #nappia painettu JA R
         break;
 
     case '5v tuotto':
-        require_once MODEL_DIR . 'funktiot.php'; 
+        require_once CONTROLLER_DIR . 'funktiot.php'; 
         require_once MODEL_DIR . 'tulosta.php';
         $nimet = array();
         $valitut = array();
