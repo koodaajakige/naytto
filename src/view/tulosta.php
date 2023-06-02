@@ -5,7 +5,6 @@
 <h2>Osake- ja sijoitustiedot</h2>
 <br>
 <h3> Valitse vertailtavat yritykset:</h3>
-<br>
 
 <?php
 require_once MODEL_DIR . 'tulosta.php';
@@ -30,17 +29,21 @@ $firmat = haeTiedot();
 <div class="vertaa">
 <input type="submit" value="Alkusijoitukset" name="tulosta"><br>
 <input type="submit" value="5v tuotto" name="tulosta">
-<!-- Lisäominaisuus, mikäli halutaan poistaa yritys:
-    <input type="submit" value="Poista yritys" name="tulosta"> -->
+<!-- Lisäominaisuus, mikäli halutaan poistaa yritys: 
+    <input type="submit" value="Poista yritys" name="tulosta">  -->
 </div>
 </form> 
 </div>
 <br>
 
 <?php
+if (isset($_POST['tulosta']) AND empty($firmat))  { #nappia painettu, yhtään yritystä ei tk:ssa
+    echo "<h4>Yhtään yritystä ei ole tallennettu</h4>";
+    echo "<h4>Käy lisäämässä ensin ainakin 1 yrityksen tiedot</h4>";
+}
 
 if (isset($_POST['tulosta']) AND isset($_POST['nimi']))  { #nappia painettu JA RUUTU TÄPÄTTY
-     $lomake = $_POST['tulosta'];
+    $lomake = $_POST['tulosta'];
     
     switch($lomake){
         case 'Alkusijoitukset':
@@ -240,22 +243,24 @@ if (isset($_POST['tulosta']) AND isset($_POST['nimi']))  { #nappia painettu JA R
                 }
                 break;
 
-        /* Lisäominaisuus, mikäli halutaan poistaa yritys.
+        /* Lisäominaisuus, mikäli halutaan poistaa yritys. 
         case 'Poista yritys':
         require_once MODEL_DIR . 'tulosta.php';
-        $nimet = []; #apulista täpätyille nimille.
+        $nimet = []; 
         foreach ($_POST['nimi'] as $yritys) {
-        array_push($nimet, $yritys); #täpätyt nimet listaan
+        array_push($nimet, $yritys); 
         poistaYritys($yritys);
         }
-        echo "<h4>Yrityksen poisto onnistui!</h4>";
-        break;*/
-                
-        }
+        header("Refresh: 0");
+        break;  */
+    }
+       
 } else { 
-    if (isset($_POST['tulosta']) AND !isset($_POST['nimi'])){#nappia painettu mutta ruutua ei ole täpätty
+    if (isset($_POST['tulosta']) AND !isset($_POST['nimi']) AND !isset($firmat) || $firmat == true){ #nappia painettu mutta ruutua ei ole täpätty
         echo "<h4>Valitse ainakin yksi vaihtoehto</h4>";
 }
+   
 }
 
 ?>
+</div>

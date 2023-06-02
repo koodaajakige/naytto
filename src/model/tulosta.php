@@ -10,9 +10,10 @@ function haeYritys($yritys) {
     return DB::run('SELECT * FROM sijoitus WHERE nimi = ?;' , [$yritys])->fetchAll();
 }
 
+/* Valmius yrityksen poistoon:  
 function poistaYritys($yritys) {
     return DB::run('DELETE FROM sijoitus WHERE nimi = ?;' , [$yritys])->fetchAll();
-}
+} */
 
 ?>
 

@@ -2,7 +2,7 @@
 
 <div class="kirjautuminen">
 <form action="" method="POST">
-<h1>Lisää tiedot tietokantaan</h1>
+<h1>Lisää uusi yritys</h1>
     <div>
         <label>Nimi:</label>
         <input type="text" name="nimi" value="<?= getValue($formdata, 'nimi') ?>">
