@@ -39,7 +39,7 @@ $firmat = haeTiedot();
 <?php
 if (isset($_POST['tulosta']) AND empty($firmat))  { #nappia painettu, yhtään yritystä ei tk:ssa
     echo "<h4>Yhtään yritystä ei ole tallennettu</h4>";
-    echo "<h4>Käy lisäämässä ensin ainakin 1 yrityksen tiedot</h4>";
+    echo "<h4>Käy lisäämässä ainakin 1 yrityksen tiedot</h4>";
 }
 
 if (isset($_POST['tulosta']) AND isset($_POST['nimi']))  { #nappia painettu JA RUUTU TÄPÄTTY
@@ -256,6 +256,7 @@ if (isset($_POST['tulosta']) AND isset($_POST['nimi']))  { #nappia painettu JA R
     }
        
 } else { 
+    #nappia painettu mutta ruutua ei ole täpätty, yrityksiä tallennettu tk:aan
     if (isset($_POST['tulosta']) AND !isset($_POST['nimi']) AND !isset($firmat) || $firmat == true){ #nappia painettu mutta ruutua ei ole täpätty
         echo "<h4>Valitse ainakin yksi vaihtoehto</h4>";
 }

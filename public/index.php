@@ -126,16 +126,13 @@ switch ($request) {
       break;        
 
     case '/tulosta':
-        if (isset($_SESSION['user'])) {
-        require_once MODEL_DIR . 'tulosta.php';
-        $hae=haeTiedot();
-        echo $templates->render('tulosta', ['hae' => $hae]);
-        break;
-        }
-        else {
-        echo $templates->render('kirjautumaton');
-        break;
-        }
+      if (isset($_SESSION['user'])) {
+          echo $templates->render('tulosta');
+          break;
+      } else {
+          echo $templates ->render('kirjautumaton');
+          break;
+      }
     
     case '/yhteydenotto':
         # Kun lähetä-nappia on painettu yhteydenottolomakkeella, 

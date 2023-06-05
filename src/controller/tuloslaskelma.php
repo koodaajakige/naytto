@@ -21,12 +21,11 @@ function tarkistaTiedot ($formdata) {
     }
 
     #liikevaihto
+    #liikevaihto
     if (!isset($formdata['liikevaihto']) AND $formdata['liikevaihto'] !=0 || !$formdata['liikevaihto']) {
         $error['liikevaihto'] = "Syötä yrityksen liikevaihto.";
-    } elseif ($formdata['liikevaihto']< 0) {
+    } else if ($formdata['liikevaihto'] < "0") {
         $error['liikevaihto'] = "Syötä liikevaihto positiivisena numerona.";
-    } elseif (empty($formdata['liikevaihto']) && $formdata['liikevaihto'] !=0){
-        $formdata['liikevaihto'] = null;
     } else {
         $formdata['liikevaihto'] = $formdata['liikevaihto'];
     }
@@ -34,7 +33,7 @@ function tarkistaTiedot ($formdata) {
     #materiaalit
     if (!isset($formdata['materiaalit']) AND $formdata['materiaalit'] != 0 || !$formdata['materiaalit']) {
         $error['materiaalit'] = "Syötä yrityksen materiaalikulut.";
-    } else if ($formdata['materiaalit'] < 0) {
+    } else if ($formdata['materiaalit'] < "0") {
         $error['materiaalit'] = "Syötä materiaalikulut suurempana tai yhtäsuurena kuin nolla";
     } else {
         $formdata['materiaalit'] = $formdata['materiaalit'];
@@ -43,7 +42,7 @@ function tarkistaTiedot ($formdata) {
     #henkilosto
     if (!isset($formdata['henkilosto']) AND $formdata['henkilosto'] != 0|| !$formdata['henkilosto']) {
         $error['henkilosto'] = "Syötä yrityksen henkilöstökulut.";
-    } else if ($formdata['henkilosto'] < 0) {
+    } else if ($formdata['henkilosto'] < "0") {
         $error['henkilosto'] = "Syötä henkilöstökulut suurempana tai yhtäsuurena kuin nolla";
     } else {
         $formdata['henkilosto'] = $formdata['henkilosto'];
@@ -52,7 +51,7 @@ function tarkistaTiedot ($formdata) {
     #poistot
     if (!isset($formdata['poistot']) AND $formdata['poistot'] != 0|| !$formdata['poistot']) {
         $error['poistot'] = "Syötä yrityksen poistot.";
-    } else if ($formdata['poistot'] < 0) {
+    } else if ($formdata['poistot'] < "0") {
         $error['poistot'] = "Syötä poistot suurempana tai yhtäsuurena kuin nolla";
     } else {
         $formdata['poistot'] = $formdata['poistot'];
@@ -61,7 +60,7 @@ function tarkistaTiedot ($formdata) {
     #muutkulut
     if (!isset($formdata['muutkulut']) AND $formdata['muutkulut'] != 0 || !$formdata['muutkulut']) {
         $error['muutkulut'] = "Syötä yrityksen muut kulut.";
-    } else if ($formdata['muutkulut'] < 0) {
+    } else if ($formdata['muutkulut'] < "0") {
         $error['muutkulut'] = "Syötä muut kulut suurempana tai yhtäsuurena kuin nolla";
     } else {
         $formdata['muutkulut'] = $formdata['muutkulut'];
@@ -70,7 +69,7 @@ function tarkistaTiedot ($formdata) {
     #rahoitus
     if (!isset($formdata['rahoitus']) AND $formdata['rahoitus'] != 0 || !$formdata['rahoitus']) {
         $error['rahoitus'] = "Syötä yrityksen rahoituskulut.";
-    } else if ($formdata['rahoitus'] < 0) {
+    } else if ($formdata['rahoitus'] < "0") {
         $error['rahoitus'] = "Syötä rahoituskulut suurempana tai yhtäsuurena kuin nolla";
     } else {
         $formdata['rahoitus'] = $formdata['rahoitus'];
@@ -79,7 +78,7 @@ function tarkistaTiedot ($formdata) {
     #verot
     if (!isset($formdata['verot']) AND $formdata['verot'] != 0 || !$formdata['verot']) {
         $error['verot'] = "Syötä yrityksen verot.";
-    } else if ($formdata['verot'] < 0 ) {
+    } else if ($formdata['verot'] < "0") {
         $error['verot'] = "Syötä verot suurempana tai yhtäsuurena kuin nolla";
     } else {
         $formdata['verot'] = $formdata['verot'];
@@ -96,8 +95,10 @@ function tarkistaTiedot ($formdata) {
     } 
 
     #sijoitus
-    if (!isset($formdata['sijoitus']) || !$formdata['sijoitus']) {
+    if (!isset($formdata['sijoitus']) || !$formdata['sijoitus'])  {
         $error['sijoitus'] = "Syötä sijoitettava summa.";
+    } else if ($formdata['sijoitus'] < $formdata['osakehinta']) {
+        $error['sijoitus'] = "Sijoitettavan summan on oltava vähintään $formdata[osakehinta].";
     } 
     
     if (!$error) {
